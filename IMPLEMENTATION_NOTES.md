@@ -30,7 +30,72 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - Employee range: 0 to 100,000
 - Location string validation
 - Description validation (min 10 chars)
+- **NEW**: Industry description validation (5-500 chars, optional)
 - Sort options: profitAsc, registrationDateDesc, numEmployeesAsc
+
+## Industry Code Matching ✅ COMPLETE
+
+### Overview
+
+Converts user-friendly industry descriptions (e.g., "software development") into Swedish `proffIndustryCode` values for precise Allabolag searches.
+
+### Implementation Strategy
+
+✅ **Fast Semantic Similarity**: Text-based matching against 645 enriched Swedish industry codes
+✅ **AI Refinement**: Optional Claude-powered refinement for ambiguous cases
+✅ **URL Integration**: Automatic parameter injection into Allabolag searches
+
+### Data Sources
+
+- **Industry Codes**: 645 Swedish industry codes extracted from Allabolag
+- **Enriched Data**: English descriptions and keywords added via AI enrichment
+- **File**: `src/data/enrichedIndustryCodes.json`
+
+### Technical Process
+
+1. **Text Similarity Scoring** (~100ms):
+
+   - Exact phrase matching (weight 1.0)
+   - Word overlap scoring (weight 0.8)
+   - Keyword matching (weight 0.3)
+   - Description relevance (weight 0.5)
+
+2. **Candidate Filtering**:
+
+   - Filter similarity > 0.1
+   - Top 15 candidates for AI review
+
+3. **AI Refinement** (~1 second, optional):
+
+   - Claude 3 Haiku semantic analysis
+   - Only for ambiguous cases (many candidates)
+   - Returns 1-8 most relevant codes
+
+4. **URL Parameter**:
+   - Format: `&proffIndustryCode=10002115%2C10002102%2C10002017`
+   - Automatically added to Allabolag searches
+
+### Performance
+
+- **Total Time**: ~100ms (text similarity) + ~1s (optional AI)
+- **Accuracy**: High semantic understanding with Swedish industry context
+- **Fallback**: Text similarity if AI fails
+
+### Example Mappings
+
+```
+"software development" → ["10002115", "10002102", "10002017"]
+"web development" → ["10004496", "10002115", "10002383"]
+"restaurants" → ["10006755", "10241591", "10006767"]
+"construction" → ["10001729", "10001708", "10000708"]
+"healthcare" → ["10008653", "10008612", "10008651"]
+```
+
+### API Integration
+
+- **Parameter**: `industryDescription` (optional, 5-500 chars)
+- **Response**: `metadata.industry_codes` array shows matched codes
+- **Auto-filtering**: Companies automatically filtered by industry
 
 ## Allabolag Scraping ✅ COMPLETE
 
@@ -50,6 +115,7 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - `sort` → `sort` (revenueAsc, revenueDesc, profitAsc, registrationDateDesc, numEmployeesAsc)
 - `page` → `page` (for pagination)
 - `host` → `www.allabolag.se` (required parameter)
+- **NEW**: `proffIndustryCode` → Industry filtering (comma-separated codes)
 
 ### Technical Implementation
 
@@ -57,14 +123,16 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - **HTTP Client**: Built-in fetch with proper headers
 - **Rate Limiting**: 1-second delay between requests
 - **Error Handling**: Graceful failure with empty arrays
-- **Pagination**: Configurable page limits (default: 3 pages)
+- **Pagination**: Configurable page limits (default: 2 pages for performance)
 - **Sorting**: Full support for all Allabolag sort options
+- **Industry Filtering**: Automatic integration with matched industry codes
 
 ### Testing ✅ VERIFIED
 
 - **Integration tests** with real HTTP requests
 - **AstraZeneca AB verification**: Confirmed as first result for Stockholm revenue search
 - **Major Stockholm companies**: Successfully extracts Preem, Scania, H&M, Ericsson
+- **Industry filtering**: Verified with software development and restaurant queries
 - **Edge case handling**: Empty results and network errors handled gracefully
 
 ### Example Output
@@ -96,14 +164,16 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 
 ### Data Pipeline
 
-1. **Allabolag Scraping** → Company names list
-2. **Web Search** → Raw search results for each company (3 search types × 3-5 results each)
-3. **Content Extraction** → Text summarization (limited to 1500 chars per search type)
-4. **AI Processing** → Parallel extraction using Claude (3 concurrent tasks per company)
-5. **Structured Output** → Validated JSON objects via Zod schemas
+1. **Industry Matching** → Convert description to Swedish industry codes (optional)
+2. **Allabolag Scraping** → Company names list (with industry filtering)
+3. **Web Search** → Raw search results for each company (3 search types × 3-5 results each)
+4. **Content Extraction** → Text summarization (limited to 1500 chars per search type)
+5. **AI Processing** → Parallel extraction using Claude (3 concurrent tasks per company)
+6. **Structured Output** → Validated JSON objects via Zod schemas
 
 ### Rate Limiting & Performance
 
+- **Industry Matching**: ~100ms for text similarity + ~1s for AI refinement
 - **Web Search**: 1 second delay between search types
 - **Company Processing**: 2 second delay between companies
 - **Total Time**: ~20-30 seconds for 10 companies (3 searches + 3 AI extractions each)
@@ -113,6 +183,7 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 
 - **Unit Tests**: Web search content extraction and schema validation
 - **Integration Tests**: Real API calls to Brave Search and Anthropic
+- **Industry Integration**: End-to-end testing with industryDescription parameter
 - **Error Handling**: Graceful failure with partial results
 - **Environment**: Configurable API keys with health check endpoint
 
@@ -149,12 +220,11 @@ The API returns a structured response with success status, company data, statist
     "allabolag_total": 20,
     "enriched_count": 10,
     "search_params": {
-      "location": "Umeå",
-      "numEmployeesFrom": 2,
-      "numEmployeesTo": 15,
-      "sort": "profitAsc",
-      "description": "Hot dogs s s s s s s"
-    }
+      "location": "Stockholm",
+      "industryDescription": "software development",
+      "description": "Looking for software development opportunities"
+    },
+    "industry_codes": ["10002115", "10002102", "10002017"]
   }
 }
 ```
@@ -175,8 +245,65 @@ Each company object contains:
 
 - **stats**: Data availability statistics across all companies
 - **metadata**: Search parameters and result counts from Allabolag
+- **industry_codes**: Array of matched Swedish industry codes (NEW)
 - **success**: Boolean indicating if the operation completed successfully
 - **message**: Human-readable status message
+
+## API Documentation ✅ COMPLETE
+
+### Main Endpoint: `POST /api/jobs/search`
+
+**Required Parameters:**
+
+- `description`: string (10-1000 chars) - Job description/what you're looking for
+
+**Optional Parameters:**
+
+- `location`: string - Location to search (e.g., "Stockholm", "Göteborg")
+- `industryDescription`: string (5-500 chars) - **NEW** Industry type (e.g., "software development", "healthcare")
+- `revenueFrom/revenueTo`: number - Company revenue range in SEK
+- `profitFrom/profitTo`: number - Company profit range in SEK
+- `numEmployeesFrom/numEmployeesTo`: number - Company size range
+- `sort`: enum - Sort order (profitAsc, revenueDesc, etc.)
+
+**Example Request:**
+
+```json
+{
+  "description": "Looking for software development opportunities",
+  "location": "Stockholm",
+  "industryDescription": "software development",
+  "revenueFrom": 1000000
+}
+```
+
+**Health Check:** `GET /api/jobs/health`
+
+### Environment Variables Required
+
+```
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+BRAVE_API_KEY=your_brave_search_api_key_here
+PORT=4000
+```
+
+## File Structure
+
+### Core Services
+
+- `src/services/industryMatchingService.ts` - **NEW** Industry code matching
+- `src/services/allabolagScraper.ts` - Company search with industry filtering
+- `src/services/companyEnrichmentService.ts` - Web search + AI extraction
+
+### Data Files
+
+- `src/data/enrichedIndustryCodes.json` - **NEW** 645 Swedish industry codes with English descriptions
+- `src/schemas/jobSearch.ts` - Parameter validation (updated with industryDescription)
+
+### API Routes
+
+- `src/routes/jobSearch.ts` - Main endpoints with full documentation
+- `src/index.ts` - Server setup with API documentation
 
 ## Next Steps
 

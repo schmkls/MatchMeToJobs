@@ -8,6 +8,44 @@ import { IndustryMatchingService } from "../services/industryMatchingService.js"
 
 const jobSearchRouter = new Hono();
 
+/**
+ * POST /api/jobs/search
+ *
+ * Main job search endpoint that:
+ * 1. Matches industry description to Swedish industry codes (if provided)
+ * 2. Searches Allabolag for companies matching criteria
+ * 3. Enriches company data with web search and AI extraction
+ *
+ * REQUIRED PARAMETERS:
+ * - description: string (10-1000 chars) - Job description/what you're looking for
+ *
+ * OPTIONAL PARAMETERS:
+ * - location: string - Location to search (e.g., "Stockholm", "Göteborg")
+ * - industryDescription: string (5-500 chars) - Industry type (e.g., "software development", "healthcare")
+ * - revenueFrom/revenueTo: number - Company revenue range in SEK
+ * - profitFrom/profitTo: number - Company profit range in SEK
+ * - numEmployeesFrom/numEmployeesTo: number - Company size range
+ * - sort: enum - Sort order (profitAsc, revenueDesc, etc.)
+ *
+ * EXAMPLE REQUEST:
+ * {
+ *   "description": "Looking for software development opportunities",
+ *   "location": "Stockholm",
+ *   "industryDescription": "software development",
+ *   "revenueFrom": 1000000
+ * }
+ *
+ * RESPONSE:
+ * {
+ *   "success": true,
+ *   "message": "Found and enriched X companies",
+ *   "companies": [...],
+ *   "stats": {...},
+ *   "metadata": {
+ *     "industry_codes": ["10002115", "10002102", ...] // Matched industry codes
+ *   }
+ * }
+ */
 jobSearchRouter.post("/search", async (c) => {
   try {
     // Parse and validate the request body
@@ -28,6 +66,7 @@ jobSearchRouter.post("/search", async (c) => {
     }
 
     // Step 0: Match industry codes if industryDescription is provided
+    // This uses fast semantic similarity + AI to find relevant Swedish industry codes
     let industryCodes: string[] = [];
     if (validatedParams.industryDescription) {
       console.log("🏭 Matching industry description to codes...");
@@ -48,6 +87,7 @@ jobSearchRouter.post("/search", async (c) => {
     }
 
     // Step 1: Search for companies on Allabolag (limit to 2 pages for faster response)
+    // Industry codes are automatically added as &proffIndustryCode=X,Y,Z parameter
     console.log("🏢 Searching Allabolag for companies...");
     const scraper = new AllabolagScraper();
     const companies = await scraper.searchCompanies(
@@ -72,7 +112,7 @@ jobSearchRouter.post("/search", async (c) => {
           allabolag_total: 0,
           enriched_count: 0,
           search_params: validatedParams,
-          industry_codes: industryCodes,
+          industry_codes: industryCodes, // Shows which codes were used
         },
       });
     }
@@ -104,7 +144,7 @@ jobSearchRouter.post("/search", async (c) => {
         allabolag_total: companies.length,
         enriched_count: enrichedCompanies.length,
         search_params: validatedParams,
-        industry_codes: industryCodes,
+        industry_codes: industryCodes, // Shows which Swedish industry codes were matched
       },
     });
   } catch (error: any) {
@@ -126,7 +166,22 @@ jobSearchRouter.post("/search", async (c) => {
   }
 });
 
-// Health check endpoint
+/**
+ * GET /api/jobs/health
+ *
+ * Health check endpoint to verify all services are configured correctly
+ *
+ * RESPONSE:
+ * {
+ *   "status": "healthy",
+ *   "services": {
+ *     "allabolag": "operational",
+ *     "web_search": "configured|missing_api_key",
+ *     "ai_extraction": "configured|missing_api_key",
+ *     "industry_matching": "configured|missing_api_key"
+ *   }
+ * }
+ */
 jobSearchRouter.get("/health", (c) => {
   return c.json({
     status: "healthy",

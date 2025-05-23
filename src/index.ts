@@ -10,19 +10,31 @@ import dotenv from "dotenv";
 // Load environment variables
 dotenv.config();
 
+/**
+ * MatchMeToJobs API Server
+ *
+ * Main features:
+ * 1. Company search with financial/size filters (via Allabolag scraping)
+ * 2. Industry matching (converts descriptions like "software development" to Swedish codes)
+ * 3. AI-powered company enrichment (web search + extraction)
+ *
+ * Environment variables required:
+ * - ANTHROPIC_API_KEY: For AI industry matching and company enrichment
+ * - BRAVE_API_KEY: For web search during company enrichment
+ * - PORT: Server port (default: 4000)
+ *
+ * Main endpoint:
+ * POST /api/jobs/search - Find and enrich companies based on criteria
+ *
+ * Health check:
+ * GET /api/jobs/health - Verify all services are configured
+ */
 const app = new Hono();
 
 // Middleware
+app.use("*", cors());
 app.use("*", logger());
 app.use("*", prettyJSON());
-app.use(
-  "*",
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:5173"], // Add your frontend URLs
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"],
-  })
-);
 
 // Global error handler
 app.onError((err, c) => {
@@ -50,15 +62,42 @@ app.onError((err, c) => {
 // Routes
 app.route("/api/jobs", jobSearchRouter);
 
-// Root endpoint
+// Root endpoint with API documentation
 app.get("/", (c) => {
   return c.json({
-    message: "MatchMeToJobs API",
+    name: "MatchMeToJobs API",
     version: "1.0.0",
+    description: "Find and match job opportunities with company data",
     endpoints: {
-      "POST /api/jobs/search":
-        "Search for jobs based on parameters and description",
-      "GET /api/jobs/health": "Health check endpoint",
+      "POST /api/jobs/search": {
+        description: "Search and enrich companies based on criteria",
+        required: ["description"],
+        optional: [
+          "location",
+          "industryDescription", // NEW: Auto-matches to Swedish industry codes
+          "revenueFrom/To",
+          "profitFrom/To",
+          "numEmployeesFrom/To",
+          "sort",
+        ],
+        example: {
+          description: "Looking for software development opportunities",
+          location: "Stockholm",
+          industryDescription: "software development", // Matches to industry codes
+          revenueFrom: 1000000,
+        },
+      },
+      "GET /api/jobs/health": {
+        description: "Health check and service status",
+        response: "Service configuration status",
+      },
+    },
+    features: {
+      company_search: "Search Swedish companies via Allabolag",
+      industry_matching:
+        "AI-powered industry code matching (645 Swedish codes)",
+      company_enrichment: "Web search + AI extraction for company details",
+      smart_filtering: "Financial, size, and location-based filtering",
     },
   });
 });
@@ -75,9 +114,10 @@ app.notFound((c) => {
   );
 });
 
-const port = parseInt(process.env.PORT || "3000");
+const port = parseInt(process.env.PORT || "4000");
 
 console.log(`🚀 Server starting on port ${port}`);
+
 serve({
   fetch: app.fetch,
   port,

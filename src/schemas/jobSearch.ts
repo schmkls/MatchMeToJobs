@@ -1,7 +1,13 @@
 import { z } from "zod";
 
+/**
+ * Job Search Parameters Schema
+ *
+ * Defines and validates all parameters for the /api/jobs/search endpoint
+ */
 export const jobSearchParamsSchema = z
   .object({
+    // Company financial filters
     revenueFrom: z
       .number()
       .min(-2213349, "Revenue from must be at least -2,213,349")
@@ -12,12 +18,6 @@ export const jobSearchParamsSchema = z
       .number()
       .min(-2213349, "Revenue to must be at least -2,213,349")
       .max(192505000, "Revenue to must be at most 192,505,000")
-      .optional(),
-
-    location: z
-      .string()
-      .min(1, "Location cannot be empty")
-      .max(100, "Location must be less than 100 characters")
       .optional(),
 
     profitFrom: z
@@ -32,6 +32,7 @@ export const jobSearchParamsSchema = z
       .max(109441000, "Profit to must be at most 109,441,000")
       .optional(),
 
+    // Company size filters
     numEmployeesFrom: z
       .number()
       .min(0, "Number of employees from must be at least 0")
@@ -44,6 +45,14 @@ export const jobSearchParamsSchema = z
       .max(100000, "Number of employees to must be at most 100,000")
       .optional(),
 
+    // Location filter
+    location: z
+      .string()
+      .min(1, "Location cannot be empty")
+      .max(100, "Location must be less than 100 characters")
+      .optional(),
+
+    // Sorting options
     sort: z
       .enum([
         "profitAsc",
@@ -55,11 +64,14 @@ export const jobSearchParamsSchema = z
       .optional()
       .default("profitAsc"),
 
+    // REQUIRED: What you're looking for
     description: z
       .string()
       .min(10, "Description must be at least 10 characters long")
       .max(1000, "Description must be less than 1000 characters"),
 
+    // NEW: Industry matching (automatically finds Swedish proffIndustryCode values)
+    // Examples: "software development", "healthcare", "construction", "restaurants"
     industryDescription: z
       .string()
       .min(5, "Industry description must be at least 5 characters long")
