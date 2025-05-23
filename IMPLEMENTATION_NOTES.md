@@ -14,9 +14,9 @@ Use LLMs / Vercel AI SDK to lookup and find mission, product summary, website, r
 
 Reason about a good method of ranking companies based on summary.
 
-Go step by step, begin with handling params, ask user for clarification/verification of implementation. Only when verified we should move on the the Allabolag lookup.
+Use pre-existing and simple libraries instead of custom implementations if possible. Search the web for documentation and inspiration if needed. Prioritize already installed libraries and fewer dependencies, but reason about pros and cons.
 
-Use pre-existing and simple libraries instead of custom implementations if possible. Search the web for documentation and inspiration if needed.
+Please ask the user for clarifications and verifications to gain information before implementation.
 
 ## Notes so far
 
@@ -307,6 +307,6 @@ PORT=4000
 
 ## Next Steps
 
-1. ⏳ **AI-Powered Job Matching & Ranking** - Use user description to rank companies by fit
-2. ⏳ **Result Optimization** - Cache results, filter duplicates, improve search queries
-3. ⏳ **Frontend Interface** - Simple web UI for testing and demonstration
+1. ⏳ **AI-Powered Job Matching & Ranking** - Use user description to rank companies by fit. Reason about good methods.
+2. ⏳ **Result Optimization** - Cache results, filter duplicates, improve search queries.
+3. ⏳ **Frontend Interface** - Simple web UI for testing and demonstration. Support showing results and filtering list based on best description match, product match, has job ads, etc.
