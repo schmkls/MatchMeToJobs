@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { jobSearchParamsSchema } from "../schemas/jobSearch.js";
 import type { JobSearchParams } from "../schemas/jobSearch.js";
 import { AllabolagScraper } from "../services/allabolagScraper.js";
+import { CompanyEnrichmentService } from "../services/companyEnrichmentService.js";
 
 const jobSearchRouter = new Hono();
 
@@ -14,61 +15,97 @@ jobSearchRouter.post("/search", async (c) => {
 
     console.log("Starting job search with params:", validatedParams);
 
-    // Initialize the Allabolag scraper
-    const scraper = new AllabolagScraper();
+    // Check for required environment variables
+    const braveApiKey = process.env.BRAVE_API_KEY;
+    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
 
-    // Search for companies on Allabolag (limit to 2 pages for now to keep it fast)
+    if (!braveApiKey || !anthropicApiKey) {
+      throw new HTTPException(500, {
+        message:
+          "Missing required API keys. Please set BRAVE_API_KEY and ANTHROPIC_API_KEY in environment.",
+      });
+    }
+
+    // Step 1: Search for companies on Allabolag (limit to 2 pages for faster response)
+    console.log("🏢 Searching Allabolag for companies...");
+    const scraper = new AllabolagScraper();
     const companies = await scraper.searchCompanies(validatedParams, 2);
+
+    if (companies.length === 0) {
+      return c.json({
+        success: true,
+        message: "No companies found matching the criteria",
+        companies: [],
+        stats: {
+          total: 0,
+          withMission: 0,
+          withProduct: 0,
+          withJobs: 0,
+          withNews: 0,
+        },
+      });
+    }
+
+    console.log(`Found ${companies.length} companies from Allabolag`);
+
+    // Step 2: Enrich companies with web search and AI extraction (limit to 10 companies)
+    console.log("🌐 Enriching companies with web search and AI...");
+    const enrichmentService = new CompanyEnrichmentService(
+      braveApiKey,
+      anthropicApiKey
+    );
+    const enrichedCompanies = await enrichmentService.enrichCompanies(
+      companies,
+      10 // Limit to 10 companies to control costs and response time
+    );
+
+    // Step 3: Get enrichment statistics
+    const stats = enrichmentService.getEnrichmentStats(enrichedCompanies);
+
+    console.log(`Enrichment complete:`, stats);
 
     return c.json({
       success: true,
-      message: "Job search completed successfully",
-      params: validatedParams,
-      results: {
-        companies: companies,
-        total: companies.length,
-        source: "allabolag",
+      message: `Found and enriched ${enrichedCompanies.length} companies`,
+      companies: enrichedCompanies,
+      stats: stats,
+      metadata: {
+        allabolag_total: companies.length,
+        enriched_count: enrichedCompanies.length,
+        search_params: validatedParams,
       },
     });
   } catch (error: any) {
+    console.error("Job search error:", error);
+
     // Handle Zod validation errors
     if (error.name === "ZodError") {
-      const issues = error.issues.map((issue: any) => ({
-        path: issue.path.join("."),
-        message: issue.message,
-        code: issue.code,
-      }));
-
-      return c.json(
-        {
-          success: false,
-          message: "Validation failed",
-          errors: issues,
-        },
-        400
-      );
+      throw new HTTPException(400, {
+        message: "Invalid parameters",
+        cause: error.errors,
+      });
     }
 
     // Handle other errors
-    console.error("Job search error:", error);
-    return c.json(
-      {
-        success: false,
-        message: error.message || "Internal server error",
-        error: process.env.NODE_ENV === "development" ? error.stack : undefined,
-      },
-      500
-    );
+    throw new HTTPException(500, {
+      message: "Internal server error",
+      cause: error.message,
+    });
   }
 });
 
 // Health check endpoint
 jobSearchRouter.get("/health", (c) => {
   return c.json({
-    success: true,
-    message: "Job search service is healthy",
+    status: "healthy",
     timestamp: new Date().toISOString(),
-    version: "1.0.0",
+    services: {
+      allabolag: "operational",
+      web_search: process.env.BRAVE_API_KEY ? "configured" : "missing_api_key",
+      ai_extraction: process.env.ANTHROPIC_API_KEY
+        ? "configured"
+        : "missing_api_key",
+    },
   });
 });
 
