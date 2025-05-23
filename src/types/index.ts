@@ -6,7 +6,12 @@ export interface JobSearchParams {
   profitTo?: number;
   numEmployeesFrom?: number;
   numEmployeesTo?: number;
-  sort?: "profitAsc" | "registrationDateDesc" | "numEmployeesAsc";
+  sort?:
+    | "profitAsc"
+    | "registrationDateDesc"
+    | "numEmployeesAsc"
+    | "revenueAsc"
+    | "revenueDesc";
   description: string;
 }
 

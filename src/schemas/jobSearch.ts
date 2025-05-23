@@ -45,7 +45,13 @@ export const jobSearchParamsSchema = z
       .optional(),
 
     sort: z
-      .enum(["profitAsc", "registrationDateDesc", "numEmployeesAsc"])
+      .enum([
+        "profitAsc",
+        "registrationDateDesc",
+        "numEmployeesAsc",
+        "revenueAsc",
+        "revenueDesc",
+      ])
       .optional()
       .default("profitAsc"),
 

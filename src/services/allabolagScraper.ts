@@ -82,6 +82,11 @@ export class AllabolagScraper {
       url.searchParams.set("location", params.location);
     }
 
+    // Add sort parameter
+    if (params.sort) {
+      url.searchParams.set("sort", params.sort);
+    }
+
     // Add pagination
     if (page > 1) {
       url.searchParams.set("page", page.toString());

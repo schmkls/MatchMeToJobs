@@ -47,6 +47,7 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - `numEmployeesFrom` → `numEmployeesFrom`
 - `numEmployeesTo` → `numEmployeesTo`
 - `location` → `location`
+- `sort` → `sort` (revenueAsc, revenueDesc, profitAsc, registrationDateDesc, numEmployeesAsc)
 - `page` → `page` (for pagination)
 - `host` → `www.allabolag.se` (required parameter)
 
@@ -57,18 +58,19 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - **Rate Limiting**: 1-second delay between requests
 - **Error Handling**: Graceful failure with empty arrays
 - **Pagination**: Configurable page limits (default: 3 pages)
+- **Sorting**: Full support for all Allabolag sort options
 
-### Results
+### Testing ✅ VERIFIED
 
-- Successfully extracts clean company names
-- ~10 companies per page
-- No UI element contamination
-- Reliable Swedish company name detection
+- **Integration tests** with real HTTP requests
+- **AstraZeneca AB verification**: Confirmed as first result for Stockholm revenue search
+- **Major Stockholm companies**: Successfully extracts Preem, Scania, H&M, Ericsson
+- **Edge case handling**: Empty results and network errors handled gracefully
 
 ### Example Output
 
 ```
-["Zengun AB", "Yubico AB", "WVMKR Sweden AB", "Vitamin Well AB", "Ving Sverige Aktiebolag", ...]
+["AstraZeneca AB", "Preem Aktiebolag", "Scania CV Aktiebolag", "H & M Hennes & Mauritz GBC AB", "Ericsson AB", ...]
 ```
 
 ## Next Steps
