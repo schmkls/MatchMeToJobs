@@ -1,0 +1,2842 @@
+[
+  {
+    "code": "10000872",
+    "name": "Adressregister"
+  },
+  {
+    "code": "10000882",
+    "name": "Advokatbyråer"
+  },
+  {
+    "code": "10000898",
+    "name": "Affärsinformation"
+  },
+  {
+    "code": "10000911",
+    "name": "Affärssystem"
+  },
+  {
+    "code": "10000924",
+    "name": "Agenturer"
+  },
+  {
+    "code": "10241783",
+    "name": "Agenturhandel-övrig"
+  },
+  {
+    "code": "10008687",
+    "name": "Åkerier"
+  },
+  {
+    "code": "10000937",
+    "name": "Aluminium, produkter"
+  },
+  {
+    "code": "10000958",
+    "name": "Ambassader, konsulat och handelskontor i Sverige"
+  },
+  {
+    "code": "10241784",
+    "name": "Andra affärsmässiga tjänster"
+  },
+  {
+    "code": "10241785",
+    "name": "Annan utrustning - reparation"
+  },
+  {
+    "code": "10000959",
+    "name": "Antenner, paraboler"
+  },
+  {
+    "code": "10241786",
+    "name": "Antikviteter"
+  },
+  {
+    "code": "10000973",
+    "name": "Apoteksvaror, läkemedel - Distribution"
+  },
+  {
+    "code": "10241787",
+    "name": "Apoteksvaror, läkemedel - Partihandel"
+  },
+  {
+    "code": "10241788",
+    "name": "Arbetskraftstjänster"
+  },
+  {
+    "code": "10001006",
+    "name": "Arbetsmarknadsmyndigheter och näringslivsmyndigheter, bransch"
+  },
+  {
+    "code": "10241789",
+    "name": "Arbetstagarorganisationer"
+  },
+  {
+    "code": "10000625",
+    "name": "Arkitekter"
+  },
+  {
+    "code": "10000641",
+    "name": "Artister, nöjen"
+  },
+  {
+    "code": "10000654",
+    "name": "Asfalt, asfaltarbeten"
+  },
+  {
+    "code": "10008716",
+    "name": "Återvinning"
+  },
+  {
+    "code": "10241790",
+    "name": "Auktioner"
+  },
+  {
+    "code": "10000666",
+    "name": "Automater"
+  },
+  {
+    "code": "10008729",
+    "name": "Äventyrsupplevelser"
+  },
+  {
+    "code": "10241791",
+    "name": "Avfall - grossister"
+  },
+  {
+    "code": "10241876",
+    "name": "Avfallshantering"
+  },
+  {
+    "code": "10000692",
+    "name": "Badrumsinredningar, badrumsrenoveringar"
+  },
+  {
+    "code": "10000705",
+    "name": "Bagerier - Brödindustri"
+  },
+  {
+    "code": "10000718",
+    "name": "Balkonger"
+  },
+  {
+    "code": "10000731",
+    "name": "Banker"
+  },
+  {
+    "code": "10001823",
+    "name": "Bärgning, transporter"
+  },
+  {
+    "code": "10001763",
+    "name": "Båtar, båtmotorer"
+  },
+  {
+    "code": "10000757",
+    "name": "Batterier"
+  },
+  {
+    "code": "10241792",
+    "name": "Batterier - produktion"
+  },
+  {
+    "code": "10001776",
+    "name": "Båttillbehör, båtutrustningar"
+  },
+  {
+    "code": "10001797",
+    "name": "Båttrafik"
+  },
+  {
+    "code": "10001810",
+    "name": "Båtvarv, båtbyggare"
+  },
+  {
+    "code": "10241793",
+    "name": "Begravningsbyråer och krematorier"
+  },
+  {
+    "code": "10000778",
+    "name": "Behållare, kärl"
+  },
+  {
+    "code": "10000791",
+    "name": "Belysningsarmatur"
+  },
+  {
+    "code": "10000804",
+    "name": "Belysningsarmatur - Komponenter"
+  },
+  {
+    "code": "10000817",
+    "name": "Bemanningsföretag"
+  },
+  {
+    "code": "10241794",
+    "name": "Bensinstationer"
+  },
+  {
+    "code": "10000838",
+    "name": "Besiktning, provning"
+  },
+  {
+    "code": "10000859",
+    "name": "Beslag"
+  },
+  {
+    "code": "10001176",
+    "name": "Beslutsstödssystem"
+  },
+  {
+    "code": "10001189",
+    "name": "Betong, betongvaror"
+  },
+  {
+    "code": "10241795",
+    "name": "Betong, betongvaror - produktion"
+  },
+  {
+    "code": "10001202",
+    "name": "Betonghåltagning"
+  },
+  {
+    "code": "10001215",
+    "name": "Bevakningsföretag"
+  },
+  {
+    "code": "10239364",
+    "name": "Bevattningsutrustningar"
+  },
+  {
+    "code": "10241796",
+    "name": "Bibliotek- och arkivverksamhet"
+  },
+  {
+    "code": "10241797",
+    "name": "Bijouteri"
+  },
+  {
+    "code": "10241553",
+    "name": "Bijouteri - tillverkning"
+  },
+  {
+    "code": "10001228",
+    "name": "Bilar"
+  },
+  {
+    "code": "10241554",
+    "name": "Bilar - tillverkning"
+  },
+  {
+    "code": "10001294",
+    "name": "Billackering, bilplåtarbeten"
+  },
+  {
+    "code": "10001314",
+    "name": "Bilreparationer"
+  },
+  {
+    "code": "10001335",
+    "name": "Bilreservdelar"
+  },
+  {
+    "code": "10001349",
+    "name": "Bilskrot"
+  },
+  {
+    "code": "10001362",
+    "name": "Biltillbehör"
+  },
+  {
+    "code": "10001377",
+    "name": "Biluthyrning, bussuthyrning"
+  },
+  {
+    "code": "10001390",
+    "name": "Bilvård"
+  },
+  {
+    "code": "10001405",
+    "name": "Bioenergi"
+  },
+  {
+    "code": "10241555",
+    "name": "Biografer"
+  },
+  {
+    "code": "10001418",
+    "name": "Bioteknik"
+  },
+  {
+    "code": "10001443",
+    "name": "Blästring"
+  },
+  {
+    "code": "10241772",
+    "name": "Böcker, papper, tidningar och reklamblad"
+  },
+  {
+    "code": "10001456",
+    "name": "Bokbinderier"
+  },
+  {
+    "code": "10001469",
+    "name": "Bokförlag"
+  },
+  {
+    "code": "10242082",
+    "name": "Bokhandlare"
+  },
+  {
+    "code": "10001491",
+    "name": "Borrningsarbeten"
+  },
+  {
+    "code": "10001504",
+    "name": "Borstar, penslar"
+  },
+  {
+    "code": "10241659",
+    "name": "Borstar, penslar - tillverkning"
+  },
+  {
+    "code": "10241660",
+    "name": "Boskap"
+  },
+  {
+    "code": "10241764",
+    "name": "Bostäder"
+  },
+  {
+    "code": "10241763",
+    "name": "Bostadsrättsförening"
+  },
+  {
+    "code": "10241765",
+    "name": "Botaniska och zoologiska trädgårdar"
+  },
+  {
+    "code": "10001517",
+    "name": "Brandredskap, brandskydd"
+  },
+  {
+    "code": "10001530",
+    "name": "Branschorganisationer, näringslivsorganisationer"
+  },
+  {
+    "code": "10241768",
+    "name": "Bränsle - grossist och detaljist"
+  },
+  {
+    "code": "10001543",
+    "name": "Bredband"
+  },
+  {
+    "code": "10001576",
+    "name": "Bryggeriprodukter"
+  },
+  {
+    "code": "10001589",
+    "name": "Bryggor"
+  },
+  {
+    "code": "10241766",
+    "name": "Brytning och gruvdrift"
+  },
+  {
+    "code": "10241767",
+    "name": "Brytning och gruvdrift - tjänster"
+  },
+  {
+    "code": "10001602",
+    "name": "Budservice"
+  },
+  {
+    "code": "10001615",
+    "name": "Bulkgodshantering"
+  },
+  {
+    "code": "10001628",
+    "name": "Busstrafik, biltrafik"
+  },
+  {
+    "code": "10241769",
+    "name": "Butikshandel"
+  },
+  {
+    "code": "10241770",
+    "name": "Butikshandel -övrigt"
+  },
+  {
+    "code": "10001641",
+    "name": "Butiksinredningar, butiksutrustningar"
+  },
+  {
+    "code": "10001669",
+    "name": "Butiksmaskiner, butiksutrustningar"
+  },
+  {
+    "code": "10001682",
+    "name": "Byggentreprenader-Infrastruktur"
+  },
+  {
+    "code": "10001695",
+    "name": "Byggmaskiner, arbetsmaskiner"
+  },
+  {
+    "code": "10001729",
+    "name": "Byggmästare"
+  },
+  {
+    "code": "10001708",
+    "name": "Byggmaterial"
+  },
+  {
+    "code": "10241771",
+    "name": "Byggmaterial - grossist"
+  },
+  {
+    "code": "10001750",
+    "name": "Byggnadsglas"
+  },
+  {
+    "code": "10001853",
+    "name": "CAD/CAM-system"
+  },
+  {
+    "code": "10001866",
+    "name": "CallCenters, teleservice"
+  },
+  {
+    "code": "10001879",
+    "name": "Catering"
+  },
+  {
+    "code": "10001905",
+    "name": "Certifiering"
+  },
+  {
+    "code": "10001918",
+    "name": "Containrar"
+  },
+  {
+    "code": "10001931",
+    "name": "Cyklar"
+  },
+  {
+    "code": "10002214",
+    "name": "Däck"
+  },
+  {
+    "code": "10241773",
+    "name": "Dagbarnvård"
+  },
+  {
+    "code": "10241774",
+    "name": "Daghem - arrangemang"
+  },
+  {
+    "code": "10001965",
+    "name": "Data - Programvaror"
+  },
+  {
+    "code": "10001979",
+    "name": "Data- och TV-spel"
+  },
+  {
+    "code": "10002017",
+    "name": "Data/IT-konsulter . Branschspecialister"
+  },
+  {
+    "code": "10001991",
+    "name": "Databaser, arkiv, bibliotek"
+  },
+  {
+    "code": "10002004",
+    "name": "Datacenters"
+  },
+  {
+    "code": "10002029",
+    "name": "Datakommunikation"
+  },
+  {
+    "code": "10002043",
+    "name": "Datakonsulter"
+  },
+  {
+    "code": "10002076",
+    "name": "Datasäkerhet"
+  },
+  {
+    "code": "10002063",
+    "name": "Dataservice"
+  },
+  {
+    "code": "10002102",
+    "name": "Datautbildning, dataprogram, systemutveckling"
+  },
+  {
+    "code": "10002115",
+    "name": "Datautveckling, systemutveckling, programutveckling"
+  },
+  {
+    "code": "10001020",
+    "name": "Datorer - Installationer"
+  },
+  {
+    "code": "10001033",
+    "name": "Datorer - Kringutrustningar"
+  },
+  {
+    "code": "10001046",
+    "name": "Datorer - Persondatorer"
+  },
+  {
+    "code": "10001059",
+    "name": "Datorer - Service"
+  },
+  {
+    "code": "10241776",
+    "name": "Datorer och kringutrustningar - Partihandel"
+  },
+  {
+    "code": "10241777",
+    "name": "Datorer och kringutrustningar - tillverkning"
+  },
+  {
+    "code": "10001097",
+    "name": "Dekoratörer"
+  },
+  {
+    "code": "10001136",
+    "name": "Designers, formgivare"
+  },
+  {
+    "code": "10241778",
+    "name": "Detaljhandel"
+  },
+  {
+    "code": "10241779",
+    "name": "Detaljhandel - annat"
+  },
+  {
+    "code": "10001149",
+    "name": "Diamantverktyg"
+  },
+  {
+    "code": "10001162",
+    "name": "Direktmarknadsföring"
+  },
+  {
+    "code": "10002141",
+    "name": "Distribution"
+  },
+  {
+    "code": "10002154",
+    "name": "Djurartiklar, djurfoder"
+  },
+  {
+    "code": "10002175",
+    "name": "Dokumentation, information"
+  },
+  {
+    "code": "10002227",
+    "name": "Dörrar, portar"
+  },
+  {
+    "code": "10002188",
+    "name": "Dryckesautomater"
+  },
+  {
+    "code": "10241780",
+    "name": "Dryckesvaror"
+  },
+  {
+    "code": "10241781",
+    "name": "Dryckesvaror - grossist"
+  },
+  {
+    "code": "10002201",
+    "name": "Dykeri, dykeriarbeten"
+  },
+  {
+    "code": "10002370",
+    "name": "E-handel"
+  },
+  {
+    "code": "10002383",
+    "name": "E-handel - Program, system"
+  },
+  {
+    "code": "10241782",
+    "name": "Efterforskning"
+  },
+  {
+    "code": "10241556",
+    "name": "Eldfast material"
+  },
+  {
+    "code": "10241557",
+    "name": "Elektrisk installationsmaterial - tillverkning"
+  },
+  {
+    "code": "10002420",
+    "name": "Elektromekaniska verkstäder"
+  },
+  {
+    "code": "10002433",
+    "name": "Elektronik - Komponenter"
+  },
+  {
+    "code": "10002446",
+    "name": "Elektronik - Legotillverkning"
+  },
+  {
+    "code": "10002459",
+    "name": "Elektronik - Produktionsutrustningar"
+  },
+  {
+    "code": "10002472",
+    "name": "Elektronik - Systemkomponenter"
+  },
+  {
+    "code": "10241558",
+    "name": "Elektronik - Tillverkning"
+  },
+  {
+    "code": "10241559",
+    "name": "Elektronik- och telekommunikationsutrustning"
+  },
+  {
+    "code": "10241560",
+    "name": "Elektronik- och telekommunikationsutrustning - grossist"
+  },
+  {
+    "code": "10002498",
+    "name": "Elinstallationer"
+  },
+  {
+    "code": "10241561",
+    "name": "Elmaterial - reparationer"
+  },
+  {
+    "code": "10002519",
+    "name": "Elmateriel"
+  },
+  {
+    "code": "10002540",
+    "name": "Elmateriel - Komponenter"
+  },
+  {
+    "code": "10002558",
+    "name": "Elmotorer, generatorer"
+  },
+  {
+    "code": "10241562",
+    "name": "Elmotorer, generatorer - produktion"
+  },
+  {
+    "code": "10002571",
+    "name": "Energieffektivisering"
+  },
+  {
+    "code": "10002584",
+    "name": "Energiförsörjning"
+  },
+  {
+    "code": "10241563",
+    "name": "Energihandel"
+  },
+  {
+    "code": "10241564",
+    "name": "Energihandel - annat"
+  },
+  {
+    "code": "10002605",
+    "name": "Entreprenadmaskiner"
+  },
+  {
+    "code": "10002619",
+    "name": "Entreprenadmaskinsarbeten"
+  },
+  {
+    "code": "10241565",
+    "name": "Entreprenörer"
+  },
+  {
+    "code": "10002253",
+    "name": "Ergonomi - Konsulter, utrustningar"
+  },
+  {
+    "code": "10002265",
+    "name": "Etiketter, etikettutrustningar"
+  },
+  {
+    "code": "10002292",
+    "name": "Evenemangsproduktioner"
+  },
+  {
+    "code": "10241566",
+    "name": "Facklig, vetenskaplig och teknisk verksamhet"
+  },
+  {
+    "code": "10241567",
+    "name": "Fackskolor"
+  },
+  {
+    "code": "10002745",
+    "name": "Färger, lacker, tapeter"
+  },
+  {
+    "code": "10241582",
+    "name": "Färger, lacker, tapeter - grossist"
+  },
+  {
+    "code": "10241583",
+    "name": "Färger, lacker, tapeter - tillverkning"
+  },
+  {
+    "code": "10002306",
+    "name": "Fartyg, varv"
+  },
+  {
+    "code": "10002318",
+    "name": "Fasadbehandling"
+  },
+  {
+    "code": "10002759",
+    "name": "Fästelement"
+  },
+  {
+    "code": "10002331",
+    "name": "Fastighetsbolag, lokaler"
+  },
+  {
+    "code": "10239411",
+    "name": "Fastighetsförvaltning"
+  },
+  {
+    "code": "10002344",
+    "name": "Fastighetsförvaltning, fastighetsskötsel"
+  },
+  {
+    "code": "10002357",
+    "name": "Fastighetsmäklare"
+  },
+  {
+    "code": "10002806",
+    "name": "Fastighetsutveckling"
+  },
+  {
+    "code": "10002819",
+    "name": "Fastighetsvärderingar, besiktningar"
+  },
+  {
+    "code": "10002832",
+    "name": "Fiberoptik"
+  },
+  {
+    "code": "10002845",
+    "name": "Film, musik-, Distribution"
+  },
+  {
+    "code": "10002857",
+    "name": "Filter"
+  },
+  {
+    "code": "10002878",
+    "name": "Finansbolag, finansiella tjänster"
+  },
+  {
+    "code": "10002891",
+    "name": "Finanssystem och handelssystem"
+  },
+  {
+    "code": "10241568",
+    "name": "Fisk-, skaldjursodling - produktion"
+  },
+  {
+    "code": "10002903",
+    "name": "Fisk, skaldjur"
+  },
+  {
+    "code": "10002918",
+    "name": "Fisk, skaldjur - Grossister"
+  },
+  {
+    "code": "10002937",
+    "name": "Fiskeredskap"
+  },
+  {
+    "code": "10002950",
+    "name": "Fiskodling, skaldjursodling, sportfiske"
+  },
+  {
+    "code": "10002963",
+    "name": "Fjädrar"
+  },
+  {
+    "code": "10241570",
+    "name": "Fjärrvärme"
+  },
+  {
+    "code": "10002976",
+    "name": "Flaggor, flaggstänger"
+  },
+  {
+    "code": "10003041",
+    "name": "Fläktar"
+  },
+  {
+    "code": "10002989",
+    "name": "Flygfrakt, flygresor"
+  },
+  {
+    "code": "10003002",
+    "name": "Flygplan, utrustningar"
+  },
+  {
+    "code": "10241571",
+    "name": "Flygplan, utrustningar - reparationer och underhåll"
+  },
+  {
+    "code": "10241572",
+    "name": "Flygplan, utrustningar - tillverkning"
+  },
+  {
+    "code": "10003015",
+    "name": "Flygplatser"
+  },
+  {
+    "code": "10241573",
+    "name": "Flyktingförläggning"
+  },
+  {
+    "code": "10003028",
+    "name": "Flyttfirmor"
+  },
+  {
+    "code": "10003054",
+    "name": "Fodermedel"
+  },
+  {
+    "code": "10002772",
+    "name": "Fönster"
+  },
+  {
+    "code": "10003066",
+    "name": "Fordonsreparationer"
+  },
+  {
+    "code": "10002632",
+    "name": "Fordonsutrustningar, bilverkstadsutrustningar"
+  },
+  {
+    "code": "10241584",
+    "name": "Föreningar"
+  },
+  {
+    "code": "10002786",
+    "name": "Företagarcentrum, näringslivsbolag"
+  },
+  {
+    "code": "10003115",
+    "name": "Företagshälsovård, arbetsmiljökonsulter"
+  },
+  {
+    "code": "10003144",
+    "name": "Företagsprofilering"
+  },
+  {
+    "code": "10003157",
+    "name": "Företagsservice, facilities management"
+  },
+  {
+    "code": "10003170",
+    "name": "Företagsutveckling"
+  },
+  {
+    "code": "10003183",
+    "name": "Förlagsbyråer"
+  },
+  {
+    "code": "10002645",
+    "name": "Formverktyg, pressverktyg"
+  },
+  {
+    "code": "10241585",
+    "name": "Förpackningar"
+  },
+  {
+    "code": "10003345",
+    "name": "Förpackningar - Handel, konsument, kontor"
+  },
+  {
+    "code": "10003358",
+    "name": "Förpackningar - Industrin"
+  },
+  {
+    "code": "10003379",
+    "name": "Förpackningar - Transportförpackningar"
+  },
+  {
+    "code": "10003392",
+    "name": "Förpackningsmaskiner"
+  },
+  {
+    "code": "10003406",
+    "name": "Försäkringar"
+  },
+  {
+    "code": "10241587",
+    "name": "Försäkringskassan"
+  },
+  {
+    "code": "10002658",
+    "name": "Forskning"
+  },
+  {
+    "code": "10002679",
+    "name": "Forskning och utveckling"
+  },
+  {
+    "code": "10241586",
+    "name": "Förskolor"
+  },
+  {
+    "code": "10003405",
+    "name": "Försvaret"
+  },
+  {
+    "code": "10002685",
+    "name": "Fotografer"
+  },
+  {
+    "code": "10002710",
+    "name": "Fotoutrustningar"
+  },
+  {
+    "code": "10241577",
+    "name": "Frisörer"
+  },
+  {
+    "code": "10241578",
+    "name": "Fritidsbåtar och utrustning"
+  },
+  {
+    "code": "10241580",
+    "name": "Fritidsverksamhet"
+  },
+  {
+    "code": "10241581",
+    "name": "Frukt, bär och grönsaker - grossister"
+  },
+  {
+    "code": "10002736",
+    "name": "Fruktleveranser, vattenleveranser"
+  },
+  {
+    "code": "10003421",
+    "name": "Garner, vävnader"
+  },
+  {
+    "code": "10003434",
+    "name": "Gaser, utrustningar"
+  },
+  {
+    "code": "10241590",
+    "name": "Gasproduktion"
+  },
+  {
+    "code": "10241591",
+    "name": "Gatukök"
+  },
+  {
+    "code": "10241593",
+    "name": "Gipsprodukter, gips och kalk"
+  },
+  {
+    "code": "10241594",
+    "name": "Gipsprodukter, gips och kalk - tillverkning"
+  },
+  {
+    "code": "10003447",
+    "name": "Gjuterier, gjutgods"
+  },
+  {
+    "code": "10003473",
+    "name": "Glas, glasvaror"
+  },
+  {
+    "code": "10003486",
+    "name": "Glasarbeten"
+  },
+  {
+    "code": "10003499",
+    "name": "Glass"
+  },
+  {
+    "code": "10241602",
+    "name": "Gödningsmedel"
+  },
+  {
+    "code": "10241603",
+    "name": "Gödningsmedel - produktion"
+  },
+  {
+    "code": "10242083",
+    "name": "Golfbanor"
+  },
+  {
+    "code": "10003524",
+    "name": "Golfutrustningar"
+  },
+  {
+    "code": "10003536",
+    "name": "Golvbeläggningar"
+  },
+  {
+    "code": "10003549",
+    "name": "Golvinläggningar"
+  },
+  {
+    "code": "10003562",
+    "name": "Golvslipning, golvvård"
+  },
+  {
+    "code": "10003209",
+    "name": "Gravyrer, gravyrutrustningar"
+  },
+  {
+    "code": "10241595",
+    "name": "Grisuppfödning"
+  },
+  {
+    "code": "10003222",
+    "name": "Grönsaker"
+  },
+  {
+    "code": "10241596",
+    "name": "Grossister"
+  },
+  {
+    "code": "10241597",
+    "name": "Grundskolor"
+  },
+  {
+    "code": "10241598",
+    "name": "Guider"
+  },
+  {
+    "code": "10003235",
+    "name": "Guld, silver, ädelstenar"
+  },
+  {
+    "code": "10241599",
+    "name": "Guldsmeder"
+  },
+  {
+    "code": "10241600",
+    "name": "Gummi och plastprodukter - tillverkning"
+  },
+  {
+    "code": "10003249",
+    "name": "Gummivaror"
+  },
+  {
+    "code": "10003262",
+    "name": "Hallbyggnader"
+  },
+  {
+    "code": "10004162",
+    "name": "Hälsokost, naturläkemedel"
+  },
+  {
+    "code": "10241615",
+    "name": "Hälsotjänster"
+  },
+  {
+    "code": "10003275",
+    "name": "Hamnar"
+  },
+  {
+    "code": "10003307",
+    "name": "Handikapputrustningar"
+  },
+  {
+    "code": "10241616",
+    "name": "Hästhållning"
+  },
+  {
+    "code": "10004175",
+    "name": "Hästsportartiklar"
+  },
+  {
+    "code": "10241607",
+    "name": "Havs- och kustfiske"
+  },
+  {
+    "code": "10003333",
+    "name": "Hemservice"
+  },
+  {
+    "code": "10004018",
+    "name": "Hissar, rulltrappor"
+  },
+  {
+    "code": "10241608",
+    "name": "Historiska minnesmärken och byggnader"
+  },
+  {
+    "code": "10004196",
+    "name": "Högskolor, universitet"
+  },
+  {
+    "code": "10004197",
+    "name": "Högtrycksutrustningar"
+  },
+  {
+    "code": "10241609",
+    "name": "Holdingbolag"
+  },
+  {
+    "code": "10239424",
+    "name": "Hotell"
+  },
+  {
+    "code": "10004049",
+    "name": "Hotellbokning, konferensbokning"
+  },
+  {
+    "code": "10241610",
+    "name": "Hudvårdsprodukter"
+  },
+  {
+    "code": "10004062",
+    "name": "Human resources, HR"
+  },
+  {
+    "code": "10004075",
+    "name": "Hus"
+  },
+  {
+    "code": "10241612",
+    "name": "Hushållsnära tjänster"
+  },
+  {
+    "code": "10004115",
+    "name": "Hushållsutrustningar, vitvaror"
+  },
+  {
+    "code": "10241613",
+    "name": "Hushållsutrustningar, vitvaror - grossister"
+  },
+  {
+    "code": "10241614",
+    "name": "Hushållsutrustningar, vitvaror - tillverkning"
+  },
+  {
+    "code": "10004129",
+    "name": "Husvagnar, husbilar"
+  },
+  {
+    "code": "10004141",
+    "name": "Hydraulik"
+  },
+  {
+    "code": "10241617",
+    "name": "Idrottslag och klubbar"
+  },
+  {
+    "code": "10004223",
+    "name": "Inbrottsskydd"
+  },
+  {
+    "code": "10004236",
+    "name": "Industriautomation"
+  },
+  {
+    "code": "10004257",
+    "name": "Industridesigners"
+  },
+  {
+    "code": "10004270",
+    "name": "Industriellt underhåll"
+  },
+  {
+    "code": "10004283",
+    "name": "Industriförnödenheter"
+  },
+  {
+    "code": "10004296",
+    "name": "Informationskonsulter, kommunikationskonsulter"
+  },
+  {
+    "code": "10004310",
+    "name": "Ingenjör"
+  },
+  {
+    "code": "10004323",
+    "name": "Ingenjörer - Byggnadsteknik, samhällsplanering"
+  },
+  {
+    "code": "10004336",
+    "name": "Ingenjörer - Elektroteknik"
+  },
+  {
+    "code": "10004349",
+    "name": "Ingenjörer - Mätteknik"
+  },
+  {
+    "code": "10004365",
+    "name": "Ingenjörer - VVS-, miljöteknik"
+  },
+  {
+    "code": "10004378",
+    "name": "Ingenjörer, ingenjörsbyråer"
+  },
+  {
+    "code": "10004391",
+    "name": "Inkassoverksamhet, kreditupplysningsverksamhet"
+  },
+  {
+    "code": "10004417",
+    "name": "Inredning - Offentlig miljö"
+  },
+  {
+    "code": "10004431",
+    "name": "Inredningar"
+  },
+  {
+    "code": "10241618",
+    "name": "Insatsvaror"
+  },
+  {
+    "code": "10241619",
+    "name": "Insatsvaror - grossister"
+  },
+  {
+    "code": "10004443",
+    "name": "Instrument"
+  },
+  {
+    "code": "10241620",
+    "name": "Internationella organisationer"
+  },
+  {
+    "code": "10004457",
+    "name": "Internet - Konsulter, operatörer"
+  },
+  {
+    "code": "10004470",
+    "name": "Internet-Affärsportaler"
+  },
+  {
+    "code": "10004496",
+    "name": "Internetbyråer"
+  },
+  {
+    "code": "10004508",
+    "name": "Investmentbanker, Investmentbolag"
+  },
+  {
+    "code": "10004520",
+    "name": "Isoleringsentreprenörer"
+  },
+  {
+    "code": "10004533",
+    "name": "Isoleringsmaterial"
+  },
+  {
+    "code": "10241621",
+    "name": "IT - övrigt"
+  },
+  {
+    "code": "10241622",
+    "name": "Jakt, vilt och naturvård"
+  },
+  {
+    "code": "10241630",
+    "name": "Järn- och metallbrytning"
+  },
+  {
+    "code": "10003587",
+    "name": "Järn, stål"
+  },
+  {
+    "code": "10241631",
+    "name": "Järn, stål - produktion"
+  },
+  {
+    "code": "10003600",
+    "name": "Järnkonstruktioner, metallkonstruktioner"
+  },
+  {
+    "code": "10003626",
+    "name": "Järnvägstrafik"
+  },
+  {
+    "code": "10003639",
+    "name": "Järnvägsutrustningar, spårvägsutrustningar"
+  },
+  {
+    "code": "10241632",
+    "name": "Järnvägsutrustningar, spårvägsutrustningar - tillverkning"
+  },
+  {
+    "code": "10003613",
+    "name": "Järnvaror"
+  },
+  {
+    "code": "10241623",
+    "name": "Jordbruk"
+  },
+  {
+    "code": "10241624",
+    "name": "Jordbruk - andra tjänster"
+  },
+  {
+    "code": "10241625",
+    "name": "Jordbruk - boskap och djurhållning"
+  },
+  {
+    "code": "10241626",
+    "name": "Jordbruk - mjölkproduktion"
+  },
+  {
+    "code": "10241627",
+    "name": "Jordbruk - odling"
+  },
+  {
+    "code": "10241628",
+    "name": "Jordbruk - odling och djurhållning"
+  },
+  {
+    "code": "10241629",
+    "name": "Jordbruksprodukter, textilråvaror och djur - agentur"
+  },
+  {
+    "code": "10004560",
+    "name": "Juridiska byråer"
+  },
+  {
+    "code": "10241633",
+    "name": "Kablar och kraftledningar"
+  },
+  {
+    "code": "10241634",
+    "name": "Kablar och kraftledningar - tillverkning"
+  },
+  {
+    "code": "10241635",
+    "name": "Kaffe och te - agenturer"
+  },
+  {
+    "code": "10241636",
+    "name": "Kakel - tillverkning"
+  },
+  {
+    "code": "10003665",
+    "name": "Kakel, klinker"
+  },
+  {
+    "code": "10003690",
+    "name": "Kaminer, öppna spisar"
+  },
+  {
+    "code": "10241637",
+    "name": "Karosserifabriker och verkstäder"
+  },
+  {
+    "code": "10003714",
+    "name": "Kassaskåp, värdeskåp"
+  },
+  {
+    "code": "10241638",
+    "name": "Kemikalier, industrikemikaleier - grossist"
+  },
+  {
+    "code": "10003740",
+    "name": "Kemikalier, industrikemikalier"
+  },
+  {
+    "code": "10241639",
+    "name": "Kemikalier, industrikemikalier - tillverkning"
+  },
+  {
+    "code": "10003761",
+    "name": "Kemiska, kemisk-tekniska produkter"
+  },
+  {
+    "code": "10003775",
+    "name": "Keramiska produkter"
+  },
+  {
+    "code": "10003801",
+    "name": "Kläder"
+  },
+  {
+    "code": "10241641",
+    "name": "Kläder - produktion"
+  },
+  {
+    "code": "10241642",
+    "name": "Kläder, skor"
+  },
+  {
+    "code": "10003788",
+    "name": "Klockor, ur"
+  },
+  {
+    "code": "10241640",
+    "name": "Klockor, ur - produktion"
+  },
+  {
+    "code": "10004743",
+    "name": "Köksinredningar"
+  },
+  {
+    "code": "10241654",
+    "name": "Köksinredningar - agentur och grossist"
+  },
+  {
+    "code": "10241643",
+    "name": "Kol- och raffinerade petroleumprodukter - tillverkning"
+  },
+  {
+    "code": "10003829",
+    "name": "Kommuner"
+  },
+  {
+    "code": "10003830",
+    "name": "Kommuner, näringslivskontor"
+  },
+  {
+    "code": "10003851",
+    "name": "Kompetensutveckling"
+  },
+  {
+    "code": "10241644",
+    "name": "Konfektion"
+  },
+  {
+    "code": "10003864",
+    "name": "Konfektyrer, Choklad,"
+  },
+  {
+    "code": "10003877",
+    "name": "Konferensarrangörer"
+  },
+  {
+    "code": "10003890",
+    "name": "Konferenslokaler, kurslokaler, konferensgårdar"
+  },
+  {
+    "code": "10003903",
+    "name": "Konferensutrustningar, presentationsutrustningar"
+  },
+  {
+    "code": "10003937",
+    "name": "Konst"
+  },
+  {
+    "code": "10241645",
+    "name": "Konstnärer"
+  },
+  {
+    "code": "10003950",
+    "name": "Konsulter"
+  },
+  {
+    "code": "10241646",
+    "name": "Kontor- och teletjänster"
+  },
+  {
+    "code": "10241647",
+    "name": "Kontors-, kopieringsmaskiner"
+  },
+  {
+    "code": "10241648",
+    "name": "Kontors-, kopieringsmaskiner - tillverkning"
+  },
+  {
+    "code": "10003964",
+    "name": "Kontorshotell, industrihotell"
+  },
+  {
+    "code": "10003976",
+    "name": "Kontorsinredningar"
+  },
+  {
+    "code": "10004586",
+    "name": "Kontorsmaskiner"
+  },
+  {
+    "code": "10004612",
+    "name": "Kontorsmateriel"
+  },
+  {
+    "code": "10241649",
+    "name": "Kontorstjänster"
+  },
+  {
+    "code": "10004625",
+    "name": "Kopieringsarbeten, grafisk produktion"
+  },
+  {
+    "code": "10241650",
+    "name": "Kosmetik - tillverkare och grossister"
+  },
+  {
+    "code": "10241651",
+    "name": "Kosmetik, parfym och frisörartiklar"
+  },
+  {
+    "code": "10004638",
+    "name": "Kosmetika, hygienartiklar"
+  },
+  {
+    "code": "10241655",
+    "name": "Kött-, slakteriprodukter - grossist"
+  },
+  {
+    "code": "10004756",
+    "name": "Köttprodukter, slakteriprodukter"
+  },
+  {
+    "code": "10241652",
+    "name": "Kulturskolor och undervisning"
+  },
+  {
+    "code": "10004652",
+    "name": "Kurirverksamhet"
+  },
+  {
+    "code": "10004717",
+    "name": "Kvalitetsledningssystem"
+  },
+  {
+    "code": "10241653",
+    "name": "Kyl-, frysanläggningar - tillverkning"
+  },
+  {
+    "code": "10004730",
+    "name": "Kylanläggningar, frysanläggningar"
+  },
+  {
+    "code": "10004769",
+    "name": "Laboratorieanalyser"
+  },
+  {
+    "code": "10004782",
+    "name": "Laboratorieutrustningar"
+  },
+  {
+    "code": "10004795",
+    "name": "Lackeringsarbeten"
+  },
+  {
+    "code": "10241666",
+    "name": "Läder och lädervaror"
+  },
+  {
+    "code": "10241667",
+    "name": "Läder och lädervaror - tillverkning"
+  },
+  {
+    "code": "10241668",
+    "name": "Läder, skor, inredning, reseeffekter och textilier"
+  },
+  {
+    "code": "10004808",
+    "name": "Lager"
+  },
+  {
+    "code": "10004821",
+    "name": "Lagerinredning, förrådsinredning"
+  },
+  {
+    "code": "10241669",
+    "name": "Läkare"
+  },
+  {
+    "code": "10004703",
+    "name": "Läkemedel"
+  },
+  {
+    "code": "10004834",
+    "name": "Landstingen"
+  },
+  {
+    "code": "10008770",
+    "name": "Lantbruk, lantbrukare"
+  },
+  {
+    "code": "10004835",
+    "name": "Lantbruksmaskiner, förnödenheter"
+  },
+  {
+    "code": "10241657",
+    "name": "Lantbruksmaskiner, förnödenheter - grossist"
+  },
+  {
+    "code": "10004851",
+    "name": "Larm, övervakningsutrustningar"
+  },
+  {
+    "code": "10005201",
+    "name": "Läromedel"
+  },
+  {
+    "code": "10005088",
+    "name": "Lås"
+  },
+  {
+    "code": "10241665",
+    "name": "Lås och beslag - tillverkning"
+  },
+  {
+    "code": "10004864",
+    "name": "Laserarbeten, utrustningar"
+  },
+  {
+    "code": "10004677",
+    "name": "Låssmeder"
+  },
+  {
+    "code": "10004878",
+    "name": "Lastbilar, släpfordon"
+  },
+  {
+    "code": "10004891",
+    "name": "Lastkajer, dockningsanläggningar"
+  },
+  {
+    "code": "10241658",
+    "name": "Lastning och lossning"
+  },
+  {
+    "code": "10004903",
+    "name": "Lastpallar, lastmateriel"
+  },
+  {
+    "code": "10004929",
+    "name": "Legoarbeten"
+  },
+  {
+    "code": "10004950",
+    "name": "Leksaker, hobbyartiklar"
+  },
+  {
+    "code": "10241661",
+    "name": "Levande djur"
+  },
+  {
+    "code": "10241662",
+    "name": "Levande djur - grossist"
+  },
+  {
+    "code": "10004976",
+    "name": "Lim, tätningsmedel"
+  },
+  {
+    "code": "10004989",
+    "name": "Livsmedel"
+  },
+  {
+    "code": "10241663",
+    "name": "Livsmedel - agenturer och grossister"
+  },
+  {
+    "code": "10241664",
+    "name": "Livsmedel - tillverkning"
+  },
+  {
+    "code": "10005002",
+    "name": "Livsmedelsindustrimaskiner"
+  },
+  {
+    "code": "10005015",
+    "name": "Ljudanläggningar, ljusanläggningar, bildanläggningar"
+  },
+  {
+    "code": "10005028",
+    "name": "Ljudproduktion, musikproduktion"
+  },
+  {
+    "code": "10005054",
+    "name": "Logistik"
+  },
+  {
+    "code": "10005067",
+    "name": "Lyftanordningar, lyftutrustningar"
+  },
+  {
+    "code": "10005214",
+    "name": "Magasinering, lagring"
+  },
+  {
+    "code": "10005227",
+    "name": "Magneter"
+  },
+  {
+    "code": "10005748",
+    "name": "Måleriarbeten"
+  },
+  {
+    "code": "10005240",
+    "name": "Malmer, industrimineraler"
+  },
+  {
+    "code": "10005253",
+    "name": "Managementkonsulter"
+  },
+  {
+    "code": "10005279",
+    "name": "Markentreprenörer, anläggningsentreprenörer"
+  },
+  {
+    "code": "10005293",
+    "name": "Markiser"
+  },
+  {
+    "code": "10005305",
+    "name": "Marknadsföringskonsulter"
+  },
+  {
+    "code": "10005318",
+    "name": "Marknadsundersökningar"
+  },
+  {
+    "code": "10005761",
+    "name": "Märkningsutrustningar"
+  },
+  {
+    "code": "10241670",
+    "name": "Maskiner, produktion, fartyg och flygplan - agentur"
+  },
+  {
+    "code": "10005331",
+    "name": "Maskiner, verktyg - begagnat service"
+  },
+  {
+    "code": "10005344",
+    "name": "Maskinförnödenheter"
+  },
+  {
+    "code": "10241671",
+    "name": "Maskinförnödenheter - reparationer"
+  },
+  {
+    "code": "10241672",
+    "name": "Maskinförnödenheter - tillverkning"
+  },
+  {
+    "code": "10005774",
+    "name": "Mässor, utställningar"
+  },
+  {
+    "code": "10005787",
+    "name": "Mässprodukter, utställningsproduktion"
+  },
+  {
+    "code": "10005370",
+    "name": "Materialhantering - Maskiner, utrustningar"
+  },
+  {
+    "code": "10005808",
+    "name": "Mätinstrument, testutrustningar"
+  },
+  {
+    "code": "10005384",
+    "name": "Mattor"
+  },
+  {
+    "code": "10005397",
+    "name": "MC, mopeder, skotrar"
+  },
+  {
+    "code": "10005410",
+    "name": "Medicinteknisk utrustning"
+  },
+  {
+    "code": "10241673",
+    "name": "Medicinteknisk utrustning - produktion"
+  },
+  {
+    "code": "10005431",
+    "name": "Medieförmedling"
+  },
+  {
+    "code": "10005443",
+    "name": "Medieförmedling, -reklamförsäljning"
+  },
+  {
+    "code": "10005456",
+    "name": "Mejerivaror"
+  },
+  {
+    "code": "10241674",
+    "name": "Mejerivaror - grossist"
+  },
+  {
+    "code": "10005469",
+    "name": "Mekaniska verkstäder"
+  },
+  {
+    "code": "10005503",
+    "name": "Metaller, legeringar"
+  },
+  {
+    "code": "10241675",
+    "name": "Metaller, legeringar - grossist"
+  },
+  {
+    "code": "10241676",
+    "name": "Metaller, legeringar - Produktion"
+  },
+  {
+    "code": "10241677",
+    "name": "Metaller, legeringar - Reparation"
+  },
+  {
+    "code": "10005516",
+    "name": "Metallglaspartier"
+  },
+  {
+    "code": "10005529",
+    "name": "Metalltråd"
+  },
+  {
+    "code": "10241678",
+    "name": "Metallurgisk industri"
+  },
+  {
+    "code": "10005555",
+    "name": "Miljöteknik"
+  },
+  {
+    "code": "10005567",
+    "name": "Miljövård, miljökonsulter"
+  },
+  {
+    "code": "10241679",
+    "name": "Mineraler - tillverkning"
+  },
+  {
+    "code": "10241680",
+    "name": "Mineralförädling"
+  },
+  {
+    "code": "10242084",
+    "name": "Mineralvatten"
+  },
+  {
+    "code": "10241681",
+    "name": "Mjölkproduktion"
+  },
+  {
+    "code": "10005835",
+    "name": "Möbler"
+  },
+  {
+    "code": "10241691",
+    "name": "Möbler - Produktion"
+  },
+  {
+    "code": "10241692",
+    "name": "Möbler, hushållsartiklar och järnvaror - agentur"
+  },
+  {
+    "code": "10242085",
+    "name": "Motorbanor"
+  },
+  {
+    "code": "10241682",
+    "name": "Motorcykel, ATV och mopeder - agenturer och grossister"
+  },
+  {
+    "code": "10241683",
+    "name": "Motorcykel, ATV och mopeder - detaljister"
+  },
+  {
+    "code": "10241684",
+    "name": "Motorcykel, ATV och mopedverkstäder"
+  },
+  {
+    "code": "10005653",
+    "name": "Motorer"
+  },
+  {
+    "code": "10005666",
+    "name": "Motorrenoveringar"
+  },
+  {
+    "code": "10005679",
+    "name": "Multimediaproduktioner"
+  },
+  {
+    "code": "10241685",
+    "name": "Mur- och tegelsten"
+  },
+  {
+    "code": "10241686",
+    "name": "Mur- och tegelsten - tillverkning"
+  },
+  {
+    "code": "10008788",
+    "name": "Murare"
+  },
+  {
+    "code": "10241687",
+    "name": "Museer"
+  },
+  {
+    "code": "10241688",
+    "name": "Musik"
+  },
+  {
+    "code": "10005705",
+    "name": "Musikinstrument"
+  },
+  {
+    "code": "10005747",
+    "name": "Myndigheter, verk och nämnder"
+  },
+  {
+    "code": "10241689",
+    "name": "Mynt och medaljer"
+  },
+  {
+    "code": "10241690",
+    "name": "Mynt och medaljer - tillverkning"
+  },
+  {
+    "code": "10005870",
+    "name": "Nätverk, kluster"
+  },
+  {
+    "code": "10241695",
+    "name": "Nöjesparker"
+  },
+  {
+    "code": "10241694",
+    "name": "Nyhetsservice och telegrambyråer"
+  },
+  {
+    "code": "10241696",
+    "name": "Odling av potatis"
+  },
+  {
+    "code": "10241697",
+    "name": "Odling av socker"
+  },
+  {
+    "code": "10241698",
+    "name": "Odling av svamp"
+  },
+  {
+    "code": "10241700",
+    "name": "Offentlig administration"
+  },
+  {
+    "code": "10241701",
+    "name": "Oljor, oljeprodukt - tjänster"
+  },
+  {
+    "code": "10005895",
+    "name": "Oljor, oljeprodukter"
+  },
+  {
+    "code": "10241702",
+    "name": "Omvårdnad och omsorg"
+  },
+  {
+    "code": "10005908",
+    "name": "Optik"
+  },
+  {
+    "code": "10241703",
+    "name": "Optik och optisk utrustning"
+  },
+  {
+    "code": "10241704",
+    "name": "Optik och optisk utrustning - Produktion"
+  },
+  {
+    "code": "10005946",
+    "name": "Organisationer"
+  },
+  {
+    "code": "10005959",
+    "name": "Organisationskonsulter"
+  },
+  {
+    "code": "10005972",
+    "name": "Organisationskonsulter - Administration"
+  },
+  {
+    "code": "10008742",
+    "name": "Översättningar"
+  },
+  {
+    "code": "10241761",
+    "name": "Övrig tillverkning"
+  },
+  {
+    "code": "10241762",
+    "name": "Övriga fordon"
+  },
+  {
+    "code": "10005149",
+    "name": "Packningar, tätningar"
+  },
+  {
+    "code": "10241705",
+    "name": "Paketering"
+  },
+  {
+    "code": "10241716",
+    "name": "Pälsvaror"
+  },
+  {
+    "code": "10005162",
+    "name": "Papper, massa"
+  },
+  {
+    "code": "10005175",
+    "name": "Pappersindustrimaskiner"
+  },
+  {
+    "code": "10005188",
+    "name": "Pappersvaror"
+  },
+  {
+    "code": "10241706",
+    "name": "Pappersvaror - Partihandel"
+  },
+  {
+    "code": "10241707",
+    "name": "Pappersvaror - Produktion"
+  },
+  {
+    "code": "10241708",
+    "name": "Parkanläggningar"
+  },
+  {
+    "code": "10241709",
+    "name": "Parkering"
+  },
+  {
+    "code": "10239445",
+    "name": "Parkeringsprodukter"
+  },
+  {
+    "code": "10241710",
+    "name": "Partipolitiska organisationer"
+  },
+  {
+    "code": "10006520",
+    "name": "Påsar"
+  },
+  {
+    "code": "10241711",
+    "name": "Passagerartransporter"
+  },
+  {
+    "code": "10006019",
+    "name": "Passersystem"
+  },
+  {
+    "code": "10006032",
+    "name": "Patentbyråer"
+  },
+  {
+    "code": "10006075",
+    "name": "Persienner, gardiner"
+  },
+  {
+    "code": "10006088",
+    "name": "Personaluthyrning"
+  },
+  {
+    "code": "10241712",
+    "name": "Pipeline"
+  },
+  {
+    "code": "10006297",
+    "name": "Plastbearbetning"
+  },
+  {
+    "code": "10006310",
+    "name": "Plaster- Helfabrikat, beställningsarbeten"
+  },
+  {
+    "code": "10006331",
+    "name": "Plaster- Råvaror, halvfabrikat"
+  },
+  {
+    "code": "10006357",
+    "name": "Plåt"
+  },
+  {
+    "code": "10006370",
+    "name": "Plåtslagerier"
+  },
+  {
+    "code": "10006383",
+    "name": "Polisämbetet"
+  },
+  {
+    "code": "10004483",
+    "name": "Postorder/e-handel"
+  },
+  {
+    "code": "10006384",
+    "name": "Presenningar, kapell, tält"
+  },
+  {
+    "code": "10006397",
+    "name": "Presentartiklar"
+  },
+  {
+    "code": "10006410",
+    "name": "Presentreklam, reklamartiklar"
+  },
+  {
+    "code": "10241714",
+    "name": "Privat tjänsteutövning"
+  },
+  {
+    "code": "10241715",
+    "name": "Producenter"
+  },
+  {
+    "code": "10006457",
+    "name": "Profilkläder"
+  },
+  {
+    "code": "10006470",
+    "name": "Projektledning"
+  },
+  {
+    "code": "10006499",
+    "name": "Pumpar"
+  },
+  {
+    "code": "10006546",
+    "name": "Radio TV, video"
+  },
+  {
+    "code": "10006560",
+    "name": "Radio, TV-programbolag"
+  },
+  {
+    "code": "10006880",
+    "name": "Rättsväsendet"
+  },
+  {
+    "code": "10006113",
+    "name": "Rederier"
+  },
+  {
+    "code": "10006126",
+    "name": "Redovisning, bokföring"
+  },
+  {
+    "code": "10239389",
+    "name": "Rehabilitering"
+  },
+  {
+    "code": "10006148",
+    "name": "Reklambyråer"
+  },
+  {
+    "code": "10006169",
+    "name": "Rekrytering"
+  },
+  {
+    "code": "10006182",
+    "name": "Relationsmarknadsföring, CRM"
+  },
+  {
+    "code": "10241717",
+    "name": "Religösa organisationer"
+  },
+  {
+    "code": "10006206",
+    "name": "Rengöringsprodukter"
+  },
+  {
+    "code": "10241718",
+    "name": "Rengöringsprodukter - Agentur- och partihandel"
+  },
+  {
+    "code": "10006219",
+    "name": "Renhållningsentreprenörer, avfallshantering"
+  },
+  {
+    "code": "10241719",
+    "name": "Reparatörer"
+  },
+  {
+    "code": "10241720",
+    "name": "Reproduktion"
+  },
+  {
+    "code": "10006245",
+    "name": "Reproutrustningar"
+  },
+  {
+    "code": "10241721",
+    "name": "Reseeffekter"
+  },
+  {
+    "code": "10006258",
+    "name": "Reservkraft"
+  },
+  {
+    "code": "10006271",
+    "name": "Resor"
+  },
+  {
+    "code": "10006284",
+    "name": "Resor - Internetbokning"
+  },
+  {
+    "code": "10006755",
+    "name": "Restauranger"
+  },
+  {
+    "code": "10006767",
+    "name": "Restaurangutrustningar, storköksutrustningar"
+  },
+  {
+    "code": "10006791",
+    "name": "Revision"
+  },
+  {
+    "code": "10006804",
+    "name": "Riskkapitalbolag"
+  },
+  {
+    "code": "10006817",
+    "name": "Rivningsarbeten"
+  },
+  {
+    "code": "10006830",
+    "name": "Robotar"
+  },
+  {
+    "code": "10006881",
+    "name": "Rör, rördelar"
+  },
+  {
+    "code": "10006894",
+    "name": "Rörarbeten"
+  },
+  {
+    "code": "10006843",
+    "name": "Rostfria arbeten"
+  },
+  {
+    "code": "10006856",
+    "name": "Rostskyddsmedel, - rostskyddsbehandling"
+  },
+  {
+    "code": "10241722",
+    "name": "Rymdfart"
+  },
+  {
+    "code": "10007482",
+    "name": "Sågverk"
+  },
+  {
+    "code": "10007495",
+    "name": "Säkerhetssystem, säkerhetskonsulter"
+  },
+  {
+    "code": "10006920",
+    "name": "Sanering"
+  },
+  {
+    "code": "10006933",
+    "name": "Screentryckerier"
+  },
+  {
+    "code": "10006972",
+    "name": "Sjöentreprenader"
+  },
+  {
+    "code": "10241725",
+    "name": "Sjukvård"
+  },
+  {
+    "code": "10006946",
+    "name": "Sjukvårdsartiklar"
+  },
+  {
+    "code": "10241727",
+    "name": "Skatterådgivning"
+  },
+  {
+    "code": "10006989",
+    "name": "Skeppsklarerare, skeppsmäklare"
+  },
+  {
+    "code": "10242086",
+    "name": "Skidsportanläggningar"
+  },
+  {
+    "code": "10241728",
+    "name": "Skinn, läder och pälsvaror"
+  },
+  {
+    "code": "10241729",
+    "name": "Skinn, läder och pälsvaror - grossister"
+  },
+  {
+    "code": "10007002",
+    "name": "Skogsmaskiner"
+  },
+  {
+    "code": "10007014",
+    "name": "Skogstjänster"
+  },
+  {
+    "code": "10241730",
+    "name": "Skolor och utbildning"
+  },
+  {
+    "code": "10007026",
+    "name": "Skor"
+  },
+  {
+    "code": "10241732",
+    "name": "Skor - detaljister"
+  },
+  {
+    "code": "10241733",
+    "name": "Skor och tillbehör - produktion"
+  },
+  {
+    "code": "10007039",
+    "name": "Skorstensbyggare"
+  },
+  {
+    "code": "10007053",
+    "name": "Skorstensrengöring, underhåll"
+  },
+  {
+    "code": "10007079",
+    "name": "Skyddsutrustningar"
+  },
+  {
+    "code": "10007092",
+    "name": "Skyltar, skyltställ"
+  },
+  {
+    "code": "10007108",
+    "name": "Skyltar, skyltsystem - Digitala"
+  },
+  {
+    "code": "10007127",
+    "name": "Skyltmaterial"
+  },
+  {
+    "code": "10007140",
+    "name": "Slangar"
+  },
+  {
+    "code": "10007174",
+    "name": "Släpfordon, trailers"
+  },
+  {
+    "code": "10007161",
+    "name": "Slipmaterial, polermaterial, verktyg"
+  },
+  {
+    "code": "10007187",
+    "name": "Smidesverkstäder"
+  },
+  {
+    "code": "10007200",
+    "name": "Smycken, accessoarer"
+  },
+  {
+    "code": "10007234",
+    "name": "Snickeriarbeten"
+  },
+  {
+    "code": "10007248",
+    "name": "Snickeriprodukter"
+  },
+  {
+    "code": "10007261",
+    "name": "Social omsorg, entreprenader"
+  },
+  {
+    "code": "10007285",
+    "name": "Solskydd"
+  },
+  {
+    "code": "10241734",
+    "name": "Spannmål, råtobak, utsäde och djurfoder - grossister"
+  },
+  {
+    "code": "10007313",
+    "name": "Spannmål, spannmålsprodukter"
+  },
+  {
+    "code": "10007325",
+    "name": "Spedition"
+  },
+  {
+    "code": "10007344",
+    "name": "Spel, nöjesanläggningsutrustningar"
+  },
+  {
+    "code": "10241736",
+    "name": "Spel, nöjesanläggningsutrustningar - tillverkning"
+  },
+  {
+    "code": "10007357",
+    "name": "Spelutrustningar, lotteriutrustningar"
+  },
+  {
+    "code": "10007381",
+    "name": "Spisar, hällar"
+  },
+  {
+    "code": "10007394",
+    "name": "Sport"
+  },
+  {
+    "code": "10241737",
+    "name": "Sport - grossist"
+  },
+  {
+    "code": "10241738",
+    "name": "Sport - produktion"
+  },
+  {
+    "code": "10241739",
+    "name": "Sportanläggningar"
+  },
+  {
+    "code": "10007420",
+    "name": "Sprängningsarbeten"
+  },
+  {
+    "code": "10006635",
+    "name": "Städmaskiner"
+  },
+  {
+    "code": "10006648",
+    "name": "Städredskap"
+  },
+  {
+    "code": "10006661",
+    "name": "Städservice"
+  },
+  {
+    "code": "10006674",
+    "name": "Ställningar"
+  },
+  {
+    "code": "10006702",
+    "name": "Stängsel, stängselnät"
+  },
+  {
+    "code": "10007445",
+    "name": "Sten"
+  },
+  {
+    "code": "10007458",
+    "name": "Sten, sand, singel, makadam"
+  },
+  {
+    "code": "10006572",
+    "name": "Stenarbeten"
+  },
+  {
+    "code": "10006598",
+    "name": "Streckkoder, utrustningar"
+  },
+  {
+    "code": "10006611",
+    "name": "Stugor"
+  },
+  {
+    "code": "10006622",
+    "name": "Styrteknik, reglerteknik"
+  },
+  {
+    "code": "10006716",
+    "name": "Svetsning, skärningsarbeten"
+  },
+  {
+    "code": "10006729",
+    "name": "Svetsutrustningar, skärutrustningar"
+  },
+  {
+    "code": "10006742",
+    "name": "Swimming-, bubbelpooler, SPA-utrustning"
+  },
+  {
+    "code": "10007546",
+    "name": "Takarbeten"
+  },
+  {
+    "code": "10007560",
+    "name": "Takbeläggningar"
+  },
+  {
+    "code": "10007572",
+    "name": "Talare, föredragshållare"
+  },
+  {
+    "code": "10241740",
+    "name": "Tandläkare"
+  },
+  {
+    "code": "10007585",
+    "name": "Tandtekniska arbeten"
+  },
+  {
+    "code": "10241741",
+    "name": "Tapeter"
+  },
+  {
+    "code": "10007599",
+    "name": "Tapetserare"
+  },
+  {
+    "code": "10241742",
+    "name": "Taxi"
+  },
+  {
+    "code": "10007610",
+    "name": "Tegel, tegelprodukter"
+  },
+  {
+    "code": "10007623",
+    "name": "Tejper"
+  },
+  {
+    "code": "10007636",
+    "name": "Teknikkonsulter"
+  },
+  {
+    "code": "10241743",
+    "name": "Teknisk provning och analys"
+  },
+  {
+    "code": "10007671",
+    "name": "Tekniska installationer"
+  },
+  {
+    "code": "10007684",
+    "name": "Telefoner, utrustningar"
+  },
+  {
+    "code": "10007697",
+    "name": "Telefonsystem"
+  },
+  {
+    "code": "10007710",
+    "name": "Teleinstallationer"
+  },
+  {
+    "code": "10007723",
+    "name": "Telekommunikation, teleoperatörer"
+  },
+  {
+    "code": "10007736",
+    "name": "Telekonsulter"
+  },
+  {
+    "code": "10007750",
+    "name": "Telemarketing"
+  },
+  {
+    "code": "10241744",
+    "name": "Textilbehandling"
+  },
+  {
+    "code": "10007763",
+    "name": "Textilier"
+  },
+  {
+    "code": "10241745",
+    "name": "Textilier - Agentur"
+  },
+  {
+    "code": "10241746",
+    "name": "Textilier - Partihandel"
+  },
+  {
+    "code": "10241747",
+    "name": "Textilier - Produktion"
+  },
+  {
+    "code": "10008060",
+    "name": "Textilmaskiner, konfektionsmaskiner"
+  },
+  {
+    "code": "10008074",
+    "name": "Tidningar"
+  },
+  {
+    "code": "10008101",
+    "name": "Tidregistreringssystem"
+  },
+  {
+    "code": "10008114",
+    "name": "Toaletter"
+  },
+  {
+    "code": "10008127",
+    "name": "Tobak"
+  },
+  {
+    "code": "10241748",
+    "name": "Tobak - grossist"
+  },
+  {
+    "code": "10241749",
+    "name": "Torghandel"
+  },
+  {
+    "code": "10008798",
+    "name": "Torv, Jord"
+  },
+  {
+    "code": "10241750",
+    "name": "Trä och byggvaror - grossist"
+  },
+  {
+    "code": "10007880",
+    "name": "Träbearbetningsutrustningar"
+  },
+  {
+    "code": "10007893",
+    "name": "Trädgårdsanläggningar"
+  },
+  {
+    "code": "10007905",
+    "name": "Trädgårdsmaskiner, trädgårdsredskap"
+  },
+  {
+    "code": "10007931",
+    "name": "Trädgårdsväxter, plantskolor"
+  },
+  {
+    "code": "10008179",
+    "name": "Trafikskolor"
+  },
+  {
+    "code": "10008191",
+    "name": "Transformatorer, växelriktare, kondensatorer"
+  },
+  {
+    "code": "10008204",
+    "name": "Transmissioner"
+  },
+  {
+    "code": "10007790",
+    "name": "Transportbilar"
+  },
+  {
+    "code": "10007803",
+    "name": "Transportförmedling"
+  },
+  {
+    "code": "10007816",
+    "name": "Trappor"
+  },
+  {
+    "code": "10242087",
+    "name": "Trav- och galoppbanor"
+  },
+  {
+    "code": "10007944",
+    "name": "Trävaror"
+  },
+  {
+    "code": "10241751",
+    "name": "Trävaror - produktion"
+  },
+  {
+    "code": "10007828",
+    "name": "Truckar"
+  },
+  {
+    "code": "10007841",
+    "name": "Tryckerier"
+  },
+  {
+    "code": "10007867",
+    "name": "Tryckluftsutrustningar"
+  },
+  {
+    "code": "10241752",
+    "name": "Tull"
+  },
+  {
+    "code": "10007982",
+    "name": "Tvätterier"
+  },
+  {
+    "code": "10008007",
+    "name": "Tyger, sybehör"
+  },
+  {
+    "code": "10008021",
+    "name": "Ugnar"
+  },
+  {
+    "code": "10008047",
+    "name": "Undertak, undertaksarbeten"
+  },
+  {
+    "code": "10241753",
+    "name": "Urmakare"
+  },
+  {
+    "code": "10008217",
+    "name": "Utbildning"
+  },
+  {
+    "code": "10008251",
+    "name": "Uthyrning"
+  },
+  {
+    "code": "10008272",
+    "name": "Utomhusreklam"
+  },
+  {
+    "code": "10008506",
+    "name": "Väganordningar, trafikanordningar, vägarbeten"
+  },
+  {
+    "code": "10008493",
+    "name": "Vågar"
+  },
+  {
+    "code": "10008519",
+    "name": "Väggar, väggsystem"
+  },
+  {
+    "code": "10008298",
+    "name": "Vapen"
+  },
+  {
+    "code": "10241756",
+    "name": "Vapen - tillverkning"
+  },
+  {
+    "code": "10008544",
+    "name": "Värdepappershandel"
+  },
+  {
+    "code": "10008532",
+    "name": "Värdepappershandel - Internetmäklare"
+  },
+  {
+    "code": "10008558",
+    "name": "Värderingar"
+  },
+  {
+    "code": "10008571",
+    "name": "Värmebehandling, härdning"
+  },
+  {
+    "code": "10008584",
+    "name": "Värmepumpar, värmeväxlare"
+  },
+  {
+    "code": "10008597",
+    "name": "Värmeutrustningar, torkutrustningar"
+  },
+  {
+    "code": "10008324",
+    "name": "Vattenbehandlingsutrustningar"
+  },
+  {
+    "code": "10008623",
+    "name": "Växtservice, kontorsservice"
+  },
+  {
+    "code": "10008337",
+    "name": "Ventilation, luftbehandling"
+  },
+  {
+    "code": "10008350",
+    "name": "Ventiler, kopplingar"
+  },
+  {
+    "code": "10008363",
+    "name": "Verkstadsinredningar"
+  },
+  {
+    "code": "10008376",
+    "name": "Verktyg - Elverktyg"
+  },
+  {
+    "code": "10008389",
+    "name": "Verktyg - Handverktyg"
+  },
+  {
+    "code": "10008402",
+    "name": "Verktyg - Tryckluft"
+  },
+  {
+    "code": "10241757",
+    "name": "Verktyg och redskap"
+  },
+  {
+    "code": "10241758",
+    "name": "Verktyg och redskap - tillverkning"
+  },
+  {
+    "code": "10008415",
+    "name": "Verktygsmaskiner, maskinverktyg"
+  },
+  {
+    "code": "10008428",
+    "name": "Verktygsslipning, sliperier"
+  },
+  {
+    "code": "10241759",
+    "name": "Veterinärer"
+  },
+  {
+    "code": "10008441",
+    "name": "Video, film - Inspelning, produktion"
+  },
+  {
+    "code": "10008454",
+    "name": "Videokameror, filmkameror"
+  },
+  {
+    "code": "10008467",
+    "name": "Vinagenturer, spritagenturer"
+  },
+  {
+    "code": "10008480",
+    "name": "VVS-arbeten, material och produkter"
+  },
+  {
+    "code": "10008661",
+    "name": "Ytbehandling"
+  },
+  {
+    "code": "10008674",
+    "name": "Ytbehandlingsutrustningar, tillbehör"
+  },
+  {
+    "code": "10241760",
+    "name": "Zoologiska tjänster"
+  }
+]

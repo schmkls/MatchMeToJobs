@@ -12,7 +12,8 @@ export class AllabolagScraper {
    */
   async searchCompanies(
     params: JobSearchParams,
-    maxPages: number = 3
+    maxPages: number = 3,
+    industryCodes?: string[]
   ): Promise<string[]> {
     const companies: string[] = [];
 
@@ -20,7 +21,7 @@ export class AllabolagScraper {
       for (let page = 1; page <= maxPages; page++) {
         console.log(`Fetching Allabolag page ${page}...`);
 
-        const url = this.buildUrl(params, page);
+        const url = this.buildUrl(params, page, industryCodes);
         const pageCompanies = await this.scrapePage(url);
 
         companies.push(...pageCompanies);
@@ -44,7 +45,11 @@ export class AllabolagScraper {
   /**
    * Build URL with query parameters based on search criteria
    */
-  private buildUrl(params: JobSearchParams, page: number = 1): string {
+  private buildUrl(
+    params: JobSearchParams,
+    page: number = 1,
+    industryCodes?: string[]
+  ): string {
     const url = new URL(this.baseUrl);
 
     // Always add host parameter (observed in actual URLs)
@@ -85,6 +90,13 @@ export class AllabolagScraper {
     // Add sort parameter
     if (params.sort) {
       url.searchParams.set("sort", params.sort);
+    }
+
+    // Add industry codes parameter
+    if (industryCodes && industryCodes.length > 0) {
+      const formattedCodes = industryCodes.join("%2C");
+      url.searchParams.set("proffIndustryCode", formattedCodes);
+      console.log(`🏭 Using industry codes: ${industryCodes.join(", ")}`);
     }
 
     // Add pagination

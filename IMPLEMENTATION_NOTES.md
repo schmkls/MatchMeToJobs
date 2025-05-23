@@ -87,31 +87,27 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - **Mission**: `"CompanyName" mission vision purpose company`
 - **Product**: `"CompanyName" products services what does company do`
 - **Jobs**: `jobb för "CompanyName" {location} site:linkedin.com OR site:jobs.se`
-- **News**: `"CompanyName" news recent latest 2024 2025`
-- **Contact**: `"CompanyName" website contact headquarters address`
 
 ### AI Extraction Types
 
-- **Mission**: Company mission/vision with confidence score
-- **Product**: Product description and industry classification
-- **Jobs**: Up to 5 job postings with URLs and descriptions
-- **News**: Up to 3 recent news articles with summaries
-- **Contact**: Website, headquarters, founding year, employee count
+- **Mission**: Company mission/vision (returns "not found" if unavailable)
+- **Product**: Product/service summary and business description
+- **Jobs**: Job postings with URLs and platform information
 
 ### Data Pipeline
 
 1. **Allabolag Scraping** → Company names list
-2. **Web Search** → Raw search results for each company (5 search types × 3-5 results each)
+2. **Web Search** → Raw search results for each company (3 search types × 3-5 results each)
 3. **Content Extraction** → Text summarization (limited to 1500 chars per search type)
-4. **AI Processing** → Parallel extraction using Claude (5 concurrent tasks per company)
+4. **AI Processing** → Parallel extraction using Claude (3 concurrent tasks per company)
 5. **Structured Output** → Validated JSON objects via Zod schemas
 
 ### Rate Limiting & Performance
 
 - **Web Search**: 1 second delay between search types
 - **Company Processing**: 2 second delay between companies
-- **Total Time**: ~30-40 seconds for 10 companies (5 searches + 5 AI extractions each)
-- **API Costs**: ~$0.05-0.10 per company (Brave + Claude Haiku)
+- **Total Time**: ~20-30 seconds for 10 companies (3 searches + 3 AI extractions each)
+- **API Costs**: ~$0.03-0.05 per company (Brave + Claude Haiku)
 
 ### Testing ✅ VERIFIED
 
@@ -120,38 +116,67 @@ Use pre-existing and simple libraries instead of custom implementations if possi
 - **Error Handling**: Graceful failure with partial results
 - **Environment**: Configurable API keys with health check endpoint
 
-### Example Output Structure
+### API Response Structure
+
+The API returns a structured response with success status, company data, statistics, and metadata:
 
 ```json
 {
-  "company_name": "Spotify AB",
-  "mission": "To unlock the potential of human creativity",
-  "product_description": "Music streaming platform and audio content",
-  "industry": "Music Technology",
-  "website": "https://spotify.com",
-  "headquarters": "Stockholm, Sweden",
-  "founded": "2006",
-  "employee_count": "6000+",
-  "job_ads": [
+  "success": true,
+  "message": "Found and enriched 10 companies",
+  "companies": [
     {
-      "title": "Senior Software Engineer",
-      "url": "https://linkedin.com/jobs/...",
-      "platform": "LinkedIn",
-      "location": "Stockholm",
-      "summary": "Backend development role..."
+      "company_name": "Arevo AB",
+      "mission": "At Arevo, we believe that thriving crops and forests start from the ground up. Our precision nutrition technology enhances plants' natural ability to absorb nutrients and water while supporting beneficial soil microbes.",
+      "product_summary": "Arevo AB is a Swedish company that conducts research and experimental development on natural sciences and engineering, with a focus on developing innovative solutions to help plants grow better and bind more carbon for a healthier planet.",
+      "job_ads": [
+        {
+          "title": "Produktionstekniker",
+          "url": "https://se.linkedin.com/jobs/view/produktionstekniker-at-arevo-ab-3255417651",
+          "platform": "LinkedIn"
+        }
+      ]
     }
   ],
-  "news": [
-    {
-      "title": "Spotify Reports Q4 Growth",
-      "url": "https://techcrunch.com/...",
-      "date": "2024-02-01",
-      "source": "TechCrunch",
-      "summary": "Spotify reported strong growth..."
+  "stats": {
+    "total": 10,
+    "withMission": 3,
+    "withProduct": 10,
+    "withJobs": 6,
+    "withNews": 0
+  },
+  "metadata": {
+    "allabolag_total": 20,
+    "enriched_count": 10,
+    "search_params": {
+      "location": "Umeå",
+      "numEmployeesFrom": 2,
+      "numEmployeesTo": 15,
+      "sort": "profitAsc",
+      "description": "Hot dogs s s s s s s"
     }
-  ]
+  }
 }
 ```
+
+### Company Data Structure
+
+Each company object contains:
+
+- **company_name**: String - The company name from Allabolag
+- **mission**: String - Company mission/vision or "not found"
+- **product_summary**: String - Description of products/services and business focus
+- **job_ads**: Array - Job postings (can be empty array)
+  - **title**: String - Job title or summary
+  - **url**: String - Direct link to job posting
+  - **platform**: String - Source platform (LinkedIn, Company website, etc.)
+
+### Response Metadata
+
+- **stats**: Data availability statistics across all companies
+- **metadata**: Search parameters and result counts from Allabolag
+- **success**: Boolean indicating if the operation completed successfully
+- **message**: Human-readable status message
 
 ## Next Steps
 

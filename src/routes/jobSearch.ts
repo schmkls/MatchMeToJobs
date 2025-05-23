@@ -4,6 +4,7 @@ import { jobSearchParamsSchema } from "../schemas/jobSearch.js";
 import type { JobSearchParams } from "../schemas/jobSearch.js";
 import { AllabolagScraper } from "../services/allabolagScraper.js";
 import { CompanyEnrichmentService } from "../services/companyEnrichmentService.js";
+import { IndustryMatchingService } from "../services/industryMatchingService.js";
 
 const jobSearchRouter = new Hono();
 
@@ -26,10 +27,34 @@ jobSearchRouter.post("/search", async (c) => {
       });
     }
 
+    // Step 0: Match industry codes if industryDescription is provided
+    let industryCodes: string[] = [];
+    if (validatedParams.industryDescription) {
+      console.log("🏭 Matching industry description to codes...");
+      const industryMatcher = new IndustryMatchingService(anthropicApiKey);
+      industryCodes = await industryMatcher.matchIndustries(
+        validatedParams.industryDescription
+      );
+
+      if (industryCodes.length > 0) {
+        console.log(
+          `Found ${industryCodes.length} industry matches for: "${validatedParams.industryDescription}"`
+        );
+      } else {
+        console.log(
+          `No industry matches found for: "${validatedParams.industryDescription}"`
+        );
+      }
+    }
+
     // Step 1: Search for companies on Allabolag (limit to 2 pages for faster response)
     console.log("🏢 Searching Allabolag for companies...");
     const scraper = new AllabolagScraper();
-    const companies = await scraper.searchCompanies(validatedParams, 2);
+    const companies = await scraper.searchCompanies(
+      validatedParams,
+      2,
+      industryCodes
+    );
 
     if (companies.length === 0) {
       return c.json({
@@ -42,6 +67,12 @@ jobSearchRouter.post("/search", async (c) => {
           withProduct: 0,
           withJobs: 0,
           withNews: 0,
+        },
+        metadata: {
+          allabolag_total: 0,
+          enriched_count: 0,
+          search_params: validatedParams,
+          industry_codes: industryCodes,
         },
       });
     }
@@ -73,6 +104,7 @@ jobSearchRouter.post("/search", async (c) => {
         allabolag_total: companies.length,
         enriched_count: enrichedCompanies.length,
         search_params: validatedParams,
+        industry_codes: industryCodes,
       },
     });
   } catch (error: any) {
@@ -103,6 +135,9 @@ jobSearchRouter.get("/health", (c) => {
       allabolag: "operational",
       web_search: process.env.BRAVE_API_KEY ? "configured" : "missing_api_key",
       ai_extraction: process.env.ANTHROPIC_API_KEY
+        ? "configured"
+        : "missing_api_key",
+      industry_matching: process.env.ANTHROPIC_API_KEY
         ? "configured"
         : "missing_api_key",
     },

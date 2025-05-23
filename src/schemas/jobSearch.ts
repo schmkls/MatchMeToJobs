@@ -59,6 +59,12 @@ export const jobSearchParamsSchema = z
       .string()
       .min(10, "Description must be at least 10 characters long")
       .max(1000, "Description must be less than 1000 characters"),
+
+    industryDescription: z
+      .string()
+      .min(5, "Industry description must be at least 5 characters long")
+      .max(500, "Industry description must be less than 500 characters")
+      .optional(),
   })
   .refine(
     (data) => {
