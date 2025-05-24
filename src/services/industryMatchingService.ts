@@ -1,4 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { embed, embedMany, cosineSimilarity } from "ai";
+import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import * as fs from "fs";
 import * as path from "path";
@@ -25,22 +26,23 @@ interface EnrichedIndustryCode {
 }
 
 interface ScoredIndustry extends EnrichedIndustryCode {
-  score: number;
+  similarity: number;
+  embedding?: number[];
 }
 
 /**
  * Industry Matching Service
  *
  * Converts user-friendly industry descriptions (e.g., "software development")
- * into Swedish proffIndustryCode values for Allabolag searches.
+ * into Swedish proffIndustryCode values using vector embeddings.
  *
  * Process:
- * 1. Fast text similarity scoring against 645 enriched Swedish industry codes
- * 2. Filters to top 15 candidates with similarity > 0.1
- * 3. Optional AI refinement for ambiguous cases
- * 4. Returns 1-8 most relevant industry codes
+ * 1. Load enriched Swedish industry codes with pre-computed embeddings
+ * 2. Generate embedding for user query
+ * 3. Calculate cosine similarity with all industry embeddings
+ * 4. Return top matches sorted by similarity
  *
- * Performance: ~100ms per query (vs 8+ seconds with pure AI approach)
+ * Performance: ~1-2 seconds per query (embedding generation)
  *
  * Examples:
  * - "software development" → ["10002115", "10002102", "10002017"]
@@ -48,13 +50,11 @@ interface ScoredIndustry extends EnrichedIndustryCode {
  * - "restaurants" → ["10006755", "10241591", "10006767"]
  */
 export class IndustryMatchingService {
-  private client: Anthropic;
   private enrichedCodes: EnrichedIndustryCode[] = [];
+  private industryEmbeddings: Map<string, number[]> = new Map();
+  private embeddingModel = openai.embedding("text-embedding-3-small");
 
-  constructor(apiKey: string) {
-    this.client = new Anthropic({
-      apiKey: apiKey,
-    });
+  constructor() {
     this.loadEnrichedCodes();
   }
 
@@ -115,6 +115,48 @@ export class IndustryMatchingService {
   }
 
   /**
+   * Generate and cache embeddings for all industry codes
+   * This is called once during initialization or when needed
+   */
+  private async generateIndustryEmbeddings(): Promise<void> {
+    if (this.industryEmbeddings.size > 0) {
+      return; // Already generated
+    }
+
+    console.log("🔄 Generating embeddings for industry codes...");
+
+    try {
+      // Prepare searchable text for each industry
+      const industryTexts = this.enrichedCodes.map((industry) => {
+        const searchableText = [
+          industry.name,
+          industry.description,
+          ...industry.keywords,
+        ].join(" ");
+        return searchableText;
+      });
+
+      // Generate embeddings in batches
+      const { embeddings } = await embedMany({
+        model: this.embeddingModel,
+        values: industryTexts,
+      });
+
+      // Cache embeddings
+      this.enrichedCodes.forEach((industry, index) => {
+        this.industryEmbeddings.set(industry.code, embeddings[index]);
+      });
+
+      console.log(
+        `✅ Generated embeddings for ${embeddings.length} industries`
+      );
+    } catch (error) {
+      console.error("❌ Error generating industry embeddings:", error);
+      throw new Error("Failed to generate industry embeddings");
+    }
+  }
+
+  /**
    * Main matching method: converts industry description to Swedish industry codes
    *
    * @param industryDescription - User description like "software development"
@@ -128,226 +170,63 @@ export class IndustryMatchingService {
     console.log(`🔍 Matching industry description: "${industryDescription}"`);
 
     try {
-      // Step 1: Fast text similarity scoring (100ms)
-      const scoredCandidates =
-        this.calculateSimilarityScores(industryDescription);
+      // Ensure industry embeddings are generated
+      await this.generateIndustryEmbeddings();
 
-      // Step 2: Filter and sort by score
-      const topCandidates = scoredCandidates
-        .filter((candidate) => candidate.score > 0.1) // Only keep reasonably similar
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 15); // Take top 15 for AI refinement
+      // Generate embedding for the query
+      const { embedding: queryEmbedding } = await embed({
+        model: this.embeddingModel,
+        value: industryDescription,
+      });
 
-      if (topCandidates.length === 0) {
+      // Calculate similarities with all industries
+      const scoredIndustries: ScoredIndustry[] = this.enrichedCodes.map(
+        (industry) => {
+          const industryEmbedding = this.industryEmbeddings.get(industry.code);
+          if (!industryEmbedding) {
+            throw new Error(`Missing embedding for industry: ${industry.code}`);
+          }
+
+          const similarity = cosineSimilarity(
+            queryEmbedding,
+            industryEmbedding
+          );
+
+          return {
+            ...industry,
+            similarity,
+          };
+        }
+      );
+
+      // Sort by similarity and filter top results
+      const topMatches = scoredIndustries
+        .filter((industry) => industry.similarity > 0.3) // Only keep reasonably similar
+        .sort((a, b) => b.similarity - a.similarity)
+        .slice(0, 8); // Take top 8 matches
+
+      if (topMatches.length === 0) {
         console.log("❌ No similar industries found");
         return [];
       }
 
       console.log(
-        `🔍 Found ${topCandidates.length} candidates with similarity > 0.1`
+        `🔍 Found ${topMatches.length} matches with similarity > 0.3`
       );
       console.log(
-        `🏆 Top 3 by text similarity:`,
-        topCandidates
+        `🏆 Top 3 by similarity:`,
+        topMatches
           .slice(0, 3)
-          .map((c) => `${c.code} (${c.score.toFixed(3)})`)
+          .map((c) => `${c.code} (${c.similarity.toFixed(3)})`)
       );
 
-      // Step 3: Quick AI refinement of top candidates only (~1 second)
-      const finalCodes = await this.refineWithAI(
-        industryDescription,
-        topCandidates
-      );
-
-      console.log(`✅ Found ${finalCodes.length} final matches`);
-      return finalCodes;
+      const matchedCodes = topMatches.map((match) => match.code);
+      console.log(`✅ Found ${matchedCodes.length} final matches`);
+      return matchedCodes;
     } catch (error) {
       console.error("❌ Error matching industries:", error);
       return [];
     }
-  }
-
-  /**
-   * Calculate text similarity scores using multiple approaches
-   * Combines exact phrase matches, word overlap, keyword matching, and description relevance
-   */
-  private calculateSimilarityScores(query: string): ScoredIndustry[] {
-    const normalizedQuery = query.toLowerCase();
-    const queryWords = normalizedQuery
-      .split(/\s+/)
-      .filter((word) => word.length > 2);
-
-    return this.enrichedCodes.map((industry) => {
-      let score = 0;
-
-      // Combine all searchable text
-      const searchText = [
-        industry.name.toLowerCase(),
-        industry.description.toLowerCase(),
-        ...industry.keywords.map((k) => k.toLowerCase()),
-      ].join(" ");
-
-      const searchWords = searchText
-        .split(/\s+/)
-        .filter((word) => word.length > 2);
-
-      // 1. Exact phrase match (highest score)
-      if (searchText.includes(normalizedQuery)) {
-        score += 1.0;
-      }
-
-      // 2. Word overlap scoring
-      const commonWords = queryWords.filter((qWord) =>
-        searchWords.some(
-          (sWord) =>
-            sWord.includes(qWord) ||
-            qWord.includes(sWord) ||
-            this.areSimilar(qWord, sWord)
-        )
-      );
-
-      if (commonWords.length > 0) {
-        score += (commonWords.length / queryWords.length) * 0.8;
-      }
-
-      // 3. Keyword exact matches (bonus)
-      const keywordMatches = industry.keywords.filter(
-        (keyword) =>
-          normalizedQuery.includes(keyword.toLowerCase()) ||
-          queryWords.some((qWord) => keyword.toLowerCase().includes(qWord))
-      );
-
-      if (keywordMatches.length > 0) {
-        score += keywordMatches.length * 0.3;
-      }
-
-      // 4. Description relevance
-      const descWords = industry.description.toLowerCase().split(/\s+/);
-      const descMatches = queryWords.filter((qWord) =>
-        descWords.some(
-          (dWord) => dWord.includes(qWord) || qWord.includes(dWord)
-        )
-      );
-
-      if (descMatches.length > 0) {
-        score += (descMatches.length / queryWords.length) * 0.5;
-      }
-
-      return {
-        ...industry,
-        score: Math.min(score, 2.0), // Cap at 2.0
-      };
-    });
-  }
-
-  /**
-   * Simple string similarity check for fuzzy matching
-   */
-  private areSimilar(word1: string, word2: string): boolean {
-    if (word1.length < 4 || word2.length < 4) return false;
-
-    // Check if one contains the other (at least 3 chars)
-    if (word1.length >= 3 && word2.includes(word1.substring(0, 3))) return true;
-    if (word2.length >= 3 && word1.includes(word2.substring(0, 3))) return true;
-
-    return false;
-  }
-
-  /**
-   * Quick AI refinement of pre-filtered candidates
-   * Only called for ambiguous cases with many candidates
-   */
-  private async refineWithAI(
-    industryDescription: string,
-    candidates: ScoredIndustry[]
-  ): Promise<string[]> {
-    // If we have very few candidates or very high scores, skip AI
-    if (candidates.length <= 3 || candidates[0].score > 1.5) {
-      return candidates.slice(0, 8).map((c) => c.code);
-    }
-
-    const candidateList = candidates
-      .map((c) => `${c.code}: ${c.name} (similarity: ${c.score.toFixed(3)})`)
-      .join("\n");
-
-    const prompt = `You are an expert INDUSTRY CLASSIFIER. From these pre-filtered candidates, select the most relevant ones.
-
-Business description: "${industryDescription}"
-
-Pre-filtered candidates (already scored by text similarity):
-${candidateList}
-
-Instructions:
-- Select the most relevant industry codes (relevance 6+ out of 10)
-- ONLY use codes from the list above
-- Consider semantic meaning beyond keyword matching
-- Return up to 8 most relevant codes
-
-Return JSON:
-{
-  "matches": [
-    {
-      "code": "EXACT_CODE_FROM_LIST",
-      "name": "EXACT_NAME_FROM_LIST",
-      "relevance": 8
-    }
-  ]
-}`;
-
-    try {
-      const response = await this.client.messages.create({
-        model: "claude-3-haiku-20240307",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }],
-      });
-
-      const content = response.content[0];
-      if (content.type !== "text") {
-        throw new Error("Unexpected response type from AI");
-      }
-
-      const jsonMatch = content.text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        // Fallback to text similarity results
-        return candidates.slice(0, 8).map((c) => c.code);
-      }
-
-      const parsedData = JSON.parse(jsonMatch[0]);
-      const validatedData = industryMatchSchema.parse(parsedData);
-
-      // Verify codes exist in candidates
-      const candidateCodes = new Set(candidates.map((c) => c.code));
-      const validMatches = validatedData.matches.filter(
-        (match) => candidateCodes.has(match.code) && match.relevance >= 6
-      );
-
-      const matchedCodes = validMatches
-        .sort((a, b) => b.relevance - a.relevance)
-        .map((match) => match.code);
-
-      console.log(
-        `🤖 AI refined to ${matchedCodes.length} codes from ${candidates.length} candidates`
-      );
-
-      return matchedCodes.length > 0
-        ? matchedCodes
-        : candidates.slice(0, 5).map((c) => c.code);
-    } catch (error) {
-      console.error("❌ Error in AI refinement:", error);
-      // Fallback to text similarity results
-      return candidates.slice(0, 8).map((c) => c.code);
-    }
-  }
-
-  /**
-   * Format industry codes for URL parameter
-   * Example: ["10008126", "10008127"] → "10008126%2C10008127"
-   */
-  formatCodesForUrl(codes: string[]): string {
-    if (!codes || codes.length === 0) {
-      return "";
-    }
-    return codes.join("%2C");
   }
 
   /**

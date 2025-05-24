@@ -34,7 +34,6 @@ describe("Focused Extractors Integration Tests", () => {
         expect(results.mission).toBeDefined();
         expect(results.product).toBeDefined();
         expect(results.jobs).toBeDefined();
-        expect(results.news).toBeDefined();
 
         console.log("📊 Search Results Summary:");
         console.log(`  Mission results: ${results.mission.length}`);

@@ -83,14 +83,6 @@ Converts user-friendly industry descriptions (e.g., "software development") into
 
 ### Example Mappings
 
-```
-"software development" → ["10002115", "10002102", "10002017"]
-"web development" → ["10004496", "10002115", "10002383"]
-"restaurants" → ["10006755", "10241591", "10006767"]
-"construction" → ["10001729", "10001708", "10000708"]
-"healthcare" → ["10008653", "10008612", "10008651"]
-```
-
 ### API Integration
 
 - **Parameter**: `industryDescription` (optional, 5-500 chars)
@@ -148,7 +140,7 @@ Converts user-friendly industry descriptions (e.g., "software development") into
 ✅ **Brave Search API Integration**: Uses Brave Search API with "Data for AI" plan for web search functionality
 ✅ **Parallel AI Processing**: Uses Claude 3 Haiku via Anthropic SDK for concurrent data extraction  
 ✅ **Structured Output**: Zod schemas ensure consistent, validated data extraction
-✅ **Cost Control**: Limits to 10 companies and optimizes text extraction to reduce API costs
+✅ **Cost Control**: Limits to a few companies and optimizes text extraction to reduce API costs
 
 ### Web Search Queries
 

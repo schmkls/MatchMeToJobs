@@ -57,20 +57,21 @@ jobSearchRouter.post("/search", async (c) => {
     // Check for required environment variables
     const braveApiKey = process.env.BRAVE_API_KEY;
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    const openaiApiKey = process.env.OPENAI_API_KEY;
 
-    if (!braveApiKey || !anthropicApiKey) {
+    if (!braveApiKey || !anthropicApiKey || !openaiApiKey) {
       throw new HTTPException(500, {
         message:
-          "Missing required API keys. Please set BRAVE_API_KEY and ANTHROPIC_API_KEY in environment.",
+          "Missing required API keys. Please set BRAVE_API_KEY, ANTHROPIC_API_KEY, and OPENAI_API_KEY in environment.",
       });
     }
 
     // Step 0: Match industry codes if industryDescription is provided
-    // This uses fast semantic similarity + AI to find relevant Swedish industry codes
+    // This uses OpenAI embeddings for vector similarity matching
     let industryCodes: string[] = [];
     if (validatedParams.industryDescription) {
       console.log("🏭 Matching industry description to codes...");
-      const industryMatcher = new IndustryMatchingService(anthropicApiKey);
+      const industryMatcher = new IndustryMatchingService();
       industryCodes = await industryMatcher.matchIndustries(
         validatedParams.industryDescription
       );
@@ -127,7 +128,7 @@ jobSearchRouter.post("/search", async (c) => {
     );
     const enrichedCompanies = await enrichmentService.enrichCompanies(
       companies,
-      10 // Limit to 10 companies to control costs and response time
+      5 // Limit to 5 companies to control costs and response time
     );
 
     // Step 3: Get enrichment statistics
@@ -192,7 +193,7 @@ jobSearchRouter.get("/health", (c) => {
       ai_extraction: process.env.ANTHROPIC_API_KEY
         ? "configured"
         : "missing_api_key",
-      industry_matching: process.env.ANTHROPIC_API_KEY
+      industry_matching: process.env.OPENAI_API_KEY
         ? "configured"
         : "missing_api_key",
     },

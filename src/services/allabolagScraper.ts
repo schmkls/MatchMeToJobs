@@ -94,7 +94,7 @@ export class AllabolagScraper {
 
     // Add industry codes parameter
     if (industryCodes && industryCodes.length > 0) {
-      const formattedCodes = industryCodes.join("%2C");
+      const formattedCodes = industryCodes.join(",");
       url.searchParams.set("proffIndustryCode", formattedCodes);
       console.log(`🏭 Using industry codes: ${industryCodes.join(", ")}`);
     }
