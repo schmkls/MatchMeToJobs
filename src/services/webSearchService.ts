@@ -9,14 +9,11 @@ interface BraveSearchResponse {
   web?: {
     results: BraveSearchResult[];
   };
-  news?: {
-    results: BraveSearchResult[];
-  };
 }
 
 export interface SearchQuery {
   query: string;
-  type: "mission" | "product" | "jobs" | "news";
+  type: "mission" | "product" | "jobs";
   maxResults?: number;
 }
 
@@ -37,19 +34,18 @@ export class WebSearchService {
     mission: BraveSearchResult[];
     product: BraveSearchResult[];
     jobs: BraveSearchResult[];
-    news: BraveSearchResult[];
   }> {
     console.log(`🔍 Starting focused web search for: ${companyName}`);
 
-    // Define focused search queries for the four key areas
+    // Define focused search queries for the three key areas
     const queries: SearchQuery[] = [
       {
-        query: `"${companyName}" mission vision purpose company about`,
+        query: `"${companyName}" mission`,
         type: "mission",
         maxResults: 3,
       },
       {
-        query: `"${companyName}" products services what company does business`,
+        query: `"${companyName}" products services`,
         type: "product",
         maxResults: 3,
       },
@@ -58,23 +54,16 @@ export class WebSearchService {
         type: "jobs",
         maxResults: 5,
       },
-      {
-        query: `"${companyName}" news recent 2024 2025`,
-        type: "news",
-        maxResults: 3,
-      },
     ];
 
     const results: {
       mission: BraveSearchResult[];
       product: BraveSearchResult[];
       jobs: BraveSearchResult[];
-      news: BraveSearchResult[];
     } = {
       mission: [],
       product: [],
       jobs: [],
-      news: [],
     };
 
     // Execute searches with delays to respect rate limits
@@ -103,9 +92,7 @@ export class WebSearchService {
   private async performSearch(
     searchQuery: SearchQuery
   ): Promise<BraveSearchResult[]> {
-    const isNewsSearch = searchQuery.type === "news";
-    const endpoint = isNewsSearch ? "/news/search" : "/web/search";
-    const url = `${this.baseUrl}${endpoint}`;
+    const url = `${this.baseUrl}/web/search`;
 
     const params = new URLSearchParams({
       q: searchQuery.query,
@@ -133,10 +120,8 @@ export class WebSearchService {
 
       const data: BraveSearchResponse = await response.json();
 
-      // Extract results based on search type
-      const results = isNewsSearch
-        ? data.news?.results || []
-        : data.web?.results || [];
+      // Extract results from web search
+      const results = data.web?.results || [];
 
       console.log(
         `    📊 Found ${results.length} results for ${searchQuery.type}`
@@ -155,7 +140,7 @@ export class WebSearchService {
   extractSearchContent(results: BraveSearchResult[]): string {
     return results
       .map((result) => {
-        // Include URL for link extraction in jobs and news
+        // Include URL for link extraction in jobs
         const urlInfo = result.url ? `URL: ${result.url}\n` : "";
         const content = `${urlInfo}${result.title}\n${result.description}`;
         return content.slice(0, 400); // Increased limit for better context

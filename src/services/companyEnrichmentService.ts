@@ -70,7 +70,6 @@ export class CompanyEnrichmentService {
         searchResults.product
       ),
       jobs: this.webSearchService.extractSearchContent(searchResults.jobs),
-      news: this.webSearchService.extractSearchContent(searchResults.news),
     };
 
     console.log(`  🤖 Extracting structured data with focused extractors`);
@@ -87,7 +86,6 @@ export class CompanyEnrichmentService {
       mission: extractedData.mission?.mission,
       product_summary: extractedData.product?.product_summary,
       job_ads: extractedData.jobs?.job_ads,
-      recent_news: extractedData.news?.recent_news,
     };
 
     console.log(`  ✅ Enriched: ${companyName}`);
@@ -103,7 +101,6 @@ export class CompanyEnrichmentService {
     withMission: number;
     withProduct: number;
     withJobs: number;
-    withNews: number;
   } {
     return {
       total: companies.length,
@@ -113,9 +110,6 @@ export class CompanyEnrichmentService {
       withProduct: companies.filter((c) => c.product_summary).length,
       withJobs: companies.filter((c) => c.job_ads && c.job_ads.length > 0)
         .length,
-      withNews: companies.filter(
-        (c) => c.recent_news && c.recent_news.length > 0
-      ).length,
     };
   }
 

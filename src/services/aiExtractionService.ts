@@ -1,17 +1,17 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { Anthropic } from "@anthropic-ai/sdk";
 import {
   companyMissionSchema,
   companyProductSchema,
   jobListingsSchema,
-  companyNewsSchema,
-  type CompanyMission,
-  type CompanyProduct,
-  type JobListings,
-  type CompanyNews,
+} from "../schemas/companyData.js";
+import type {
+  CompanyMission,
+  CompanyProduct,
+  JobListings,
 } from "../schemas/companyData.js";
 
 interface ExtractionTask {
-  type: "mission" | "product" | "jobs" | "news";
+  type: "mission" | "product" | "jobs";
   content: string;
   companyName: string;
 }
@@ -26,7 +26,7 @@ export class AIExtractionService {
   }
 
   /**
-   * Extract company information using focused LLM extractors
+   * Extract structured company data from web search content using focused extractors
    */
   async extractCompanyData(
     companyName: string,
@@ -34,13 +34,11 @@ export class AIExtractionService {
       mission: string;
       product: string;
       jobs: string;
-      news: string;
     }
   ): Promise<{
     mission?: CompanyMission;
     product?: CompanyProduct;
     jobs?: JobListings;
-    news?: CompanyNews;
   }> {
     console.log(`🤖 Starting focused AI extraction for: ${companyName}`);
 
@@ -49,7 +47,6 @@ export class AIExtractionService {
       { type: "mission", content: searchContent.mission, companyName },
       { type: "product", content: searchContent.product, companyName },
       { type: "jobs", content: searchContent.jobs, companyName },
-      { type: "news", content: searchContent.news, companyName },
     ];
 
     // Execute extractions in parallel
@@ -62,7 +59,6 @@ export class AIExtractionService {
       mission?: CompanyMission;
       product?: CompanyProduct;
       jobs?: JobListings;
-      news?: CompanyNews;
     } = {};
 
     results.forEach((result, index) => {
@@ -77,9 +73,6 @@ export class AIExtractionService {
             break;
           case "jobs":
             extractedData.jobs = result.value as JobListings;
-            break;
-          case "news":
-            extractedData.news = result.value as CompanyNews;
             break;
         }
       } else {
@@ -96,9 +89,7 @@ export class AIExtractionService {
    */
   private async extractSingleType(
     task: ExtractionTask
-  ): Promise<
-    CompanyMission | CompanyProduct | JobListings | CompanyNews | null
-  > {
+  ): Promise<CompanyMission | CompanyProduct | JobListings | null> {
     if (!task.content || task.content.trim().length < 10) {
       console.log(
         `⏭️  Skipping ${task.type} extraction - insufficient content`
@@ -114,8 +105,6 @@ export class AIExtractionService {
           return await this.extractProduct(task);
         case "jobs":
           return await this.extractJobs(task);
-        case "news":
-          return await this.extractNews(task);
         default:
           throw new Error(`Unknown extraction type: ${task.type}`);
       }
@@ -131,6 +120,8 @@ export class AIExtractionService {
   private async extractMission(
     task: ExtractionTask
   ): Promise<CompanyMission | null> {
+    console.log("extracting mission for", task.companyName);
+    console.log("content", task.content);
     const prompt = `You are a MISSION EXTRACTOR for ${task.companyName}.
 
 Your task: Find the company's mission statement, vision, or core purpose.
@@ -208,37 +199,6 @@ Expected JSON format:
 }`;
 
     return await this.callAIExtractor(prompt, jobListingsSchema);
-  }
-
-  /**
-   * News Extractor - Find recent news with links
-   */
-  private async extractNews(task: ExtractionTask): Promise<CompanyNews | null> {
-    const prompt = `You are a NEWS EXTRACTOR for ${task.companyName}.
-
-Your task: Find recent news articles about the company with links.
-
-Search Results:
-${task.content}
-
-Instructions:
-- Find recent news articles with working URLs
-- Extract article title, URL, and brief summary
-- Focus on recent and relevant news
-- Return only JSON format
-
-Expected JSON format:
-{
-  "recent_news": [
-    {
-      "title": "news article title",
-      "url": "direct link to news article",
-      "summary": "brief summary of the news"
-    }
-  ]
-}`;
-
-    return await this.callAIExtractor(prompt, companyNewsSchema);
   }
 
   /**

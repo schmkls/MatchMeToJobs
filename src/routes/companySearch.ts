@@ -6,18 +6,18 @@ import { AllabolagScraper } from "../services/allabolagScraper.js";
 import { CompanyEnrichmentService } from "../services/companyEnrichmentService.js";
 import { IndustryMatchingService } from "../services/industryMatchingService.js";
 
-const jobSearchRouter = new Hono();
+const companySearchRouter = new Hono();
 
 /**
- * POST /api/jobs/search
+ * POST /api/companies/search
  *
- * Main job search endpoint that:
+ * Main company search endpoint that:
  * 1. Matches industry description to Swedish industry codes (if provided)
  * 2. Searches Allabolag for companies matching criteria
  * 3. Enriches company data with web search and AI extraction
  *
  * REQUIRED PARAMETERS:
- * - description: string (10-1000 chars) - Job description/what you're looking for
+ * - description: string (10-1000 chars) - Company description/what you're looking for
  *
  * OPTIONAL PARAMETERS:
  * - location: string - Location to search (e.g., "Stockholm", "Göteborg")
@@ -29,7 +29,7 @@ const jobSearchRouter = new Hono();
  *
  * EXAMPLE REQUEST:
  * {
- *   "description": "Looking for software development opportunities",
+ *   "description": "Looking for software development companies",
  *   "location": "Stockholm",
  *   "industryDescription": "software development",
  *   "revenueFrom": 1000000
@@ -46,13 +46,13 @@ const jobSearchRouter = new Hono();
  *   }
  * }
  */
-jobSearchRouter.post("/search", async (c) => {
+companySearchRouter.post("/search", async (c) => {
   try {
     // Parse and validate the request body
     const body = await c.req.json();
     const validatedParams: JobSearchParams = jobSearchParamsSchema.parse(body);
 
-    console.log("Starting job search with params:", validatedParams);
+    console.log("Starting company search with params:", validatedParams);
 
     // Check for required environment variables
     const braveApiKey = process.env.BRAVE_API_KEY;
@@ -107,7 +107,6 @@ jobSearchRouter.post("/search", async (c) => {
           withMission: 0,
           withProduct: 0,
           withJobs: 0,
-          withNews: 0,
         },
         metadata: {
           allabolag_total: 0,
@@ -149,7 +148,7 @@ jobSearchRouter.post("/search", async (c) => {
       },
     });
   } catch (error: any) {
-    console.error("Job search error:", error);
+    console.error("Company search error:", error);
 
     // Handle Zod validation errors
     if (error.name === "ZodError") {
@@ -168,7 +167,7 @@ jobSearchRouter.post("/search", async (c) => {
 });
 
 /**
- * GET /api/jobs/health
+ * GET /api/companies/health
  *
  * Health check endpoint to verify all services are configured correctly
  *
@@ -183,7 +182,7 @@ jobSearchRouter.post("/search", async (c) => {
  *   }
  * }
  */
-jobSearchRouter.get("/health", (c) => {
+companySearchRouter.get("/health", (c) => {
   return c.json({
     status: "healthy",
     timestamp: new Date().toISOString(),
@@ -200,4 +199,4 @@ jobSearchRouter.get("/health", (c) => {
   });
 });
 
-export { jobSearchRouter };
+export { companySearchRouter };

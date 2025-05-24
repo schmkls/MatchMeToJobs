@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 import { HTTPException } from "hono/http-exception";
-import { jobSearchRouter } from "./routes/jobSearch.js";
+import { companySearchRouter } from "./routes/companySearch.js";
 import dotenv from "dotenv";
 
 // Load environment variables
@@ -24,10 +24,10 @@ dotenv.config();
  * - PORT: Server port (default: 4000)
  *
  * Main endpoint:
- * POST /api/jobs/search - Find and enrich companies based on criteria
+ * POST /api/companies/search - Find and enrich companies based on criteria
  *
  * Health check:
- * GET /api/jobs/health - Verify all services are configured
+ * GET /api/companies/health - Verify all services are configured
  */
 const app = new Hono();
 
@@ -60,7 +60,7 @@ app.onError((err, c) => {
 });
 
 // Routes
-app.route("/api/jobs", jobSearchRouter);
+app.route("/api/companies", companySearchRouter);
 
 // Root endpoint with API documentation
 app.get("/", (c) => {
@@ -69,7 +69,7 @@ app.get("/", (c) => {
     version: "1.0.0",
     description: "Find and match job opportunities with company data",
     endpoints: {
-      "POST /api/jobs/search": {
+      "POST /api/companies/search": {
         description: "Search and enrich companies based on criteria",
         required: ["description"],
         optional: [
@@ -81,13 +81,13 @@ app.get("/", (c) => {
           "sort",
         ],
         example: {
-          description: "Looking for software development opportunities",
+          description: "Looking for software development companies",
           location: "Stockholm",
           industryDescription: "software development", // Matches to industry codes
           revenueFrom: 1000000,
         },
       },
-      "GET /api/jobs/health": {
+      "GET /api/companies/health": {
         description: "Health check and service status",
         response: "Service configuration status",
       },
