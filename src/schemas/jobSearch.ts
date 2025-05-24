@@ -56,6 +56,7 @@ export const jobSearchParamsSchema = z
     sort: z
       .enum([
         "profitAsc",
+        "profitDesc",
         "registrationDateDesc",
         "numEmployeesAsc",
         "revenueAsc",

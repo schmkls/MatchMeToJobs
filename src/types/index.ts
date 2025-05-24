@@ -8,6 +8,7 @@ export interface JobSearchParams {
   numEmployeesTo?: number;
   sort?:
     | "profitAsc"
+    | "profitDesc"
     | "registrationDateDesc"
     | "numEmployeesAsc"
     | "revenueAsc"
