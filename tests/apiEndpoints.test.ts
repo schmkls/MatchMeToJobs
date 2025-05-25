@@ -77,7 +77,78 @@ describe("Company API Endpoints - Integration Tests", () => {
     // Add more tests for /api/companies/search later
   });
 
-  // describe("POST /api/companies/enrich", () => {
-  //   // Tests for /enrich will go here later
-  // });
+  describe("POST /api/companies/enrich", () => {
+    const companyName = "Spotify AB";
+    const requestBody = { companyName, location: "Stockholm" };
+
+    it("should enrich a company successfully with product and mission", async () => {
+      // Ensure API keys are available for this test
+      if (!process.env.BRAVE_API_KEY || !process.env.ANTHROPIC_API_KEY) {
+        console.warn(
+          "Skipping enrichment test: BRAVE_API_KEY or ANTHROPIC_API_KEY not found."
+        );
+        return;
+      }
+
+      const res = await app.request("/api/companies/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+
+      expect(res.status).toBe(200);
+      const responseBody = await res.json();
+      console.log(`Enrichment response for ${companyName}:`, responseBody);
+
+      expect(responseBody).toHaveProperty("product");
+      expect(responseBody).toHaveProperty("mission");
+      expect(typeof responseBody.product).toBe("string");
+      expect(responseBody.product.toLowerCase()).toContain("streaming");
+      expect(typeof responseBody.mission).toBe("string");
+      expect(responseBody.mission.length).toBeGreaterThan(10); // Mission should be substantial
+    }, 45000); // Increased timeout for external API calls
+
+    it("should return 404 for a company that cannot be enriched", async () => {
+      if (!process.env.BRAVE_API_KEY || !process.env.ANTHROPIC_API_KEY) {
+        console.warn(
+          "Skipping enrichment 404 test: BRAVE_API_KEY or ANTHROPIC_API_KEY not found."
+        );
+        return;
+      }
+      const nonExistentCompany = {
+        companyName: "NonExistentMegaCorp123XYZ",
+        location: "Nowhere",
+      };
+      const res = await app.request("/api/companies/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nonExistentCompany),
+      });
+      expect(res.status).toBe(404);
+      const errorResponse = await res.json();
+      expect(errorResponse.message).toContain(
+        "Could not find or enrich company"
+      );
+    }, 30000);
+
+    it("should return 400 for invalid request body (missing companyName)", async () => {
+      const res = await app.request("/api/companies/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ location: "SomeLocation" }), // Missing companyName
+      });
+      expect(res.status).toBe(400);
+      const errorResponse = await res.json();
+      expect(errorResponse.message).toBe("Invalid parameters"); // Assuming Hono returns this for Zod errors
+      // Check for more specific error details if necessary
+      expect(errorResponse.cause[0].message).toBe(
+        "Company name cannot be empty"
+      );
+    });
+
+    // Test for 503 when API keys are missing - this requires modifying the app or environment for the test run.
+    // This can be complex to set up in a way that doesn't affect other tests.
+    // For now, this scenario is manually tested or assumed covered by the console warning in app setup.
+    // Alternatively, one could mock the service or environment variables for this specific test.
+  });
 });

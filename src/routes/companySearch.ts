@@ -5,13 +5,32 @@ import {
   CompanySearchQuery,
   companyEnrichRequestSchema,
   CompanyEnrichRequest,
+  companyEnrichResponseSchema,
   CompanyEnrichResponse,
-} from "../schemas/companySchemas.js"; // New schemas
+} from "../schemas/companySchemas.js";
 import { AllabolagScraper } from "../services/allabolagScraper.js";
 import { CompanyEnrichmentService } from "../services/companyEnrichmentService.js";
 import { IndustryMatchingService } from "../services/industryMatchingService.js"; // Added back
 
 const companySearchRouter = new Hono();
+
+// Instantiate services once
+const allabolagScraper = new AllabolagScraper(); // Assuming this was intended to be instantiated once
+const braveApiKey = process.env.BRAVE_API_KEY;
+const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+
+let companyEnrichmentService: CompanyEnrichmentService | null = null;
+
+if (braveApiKey && anthropicApiKey) {
+  companyEnrichmentService = new CompanyEnrichmentService(
+    braveApiKey,
+    anthropicApiKey
+  );
+} else {
+  console.warn(
+    "Missing BRAVE_API_KEY or ANTHROPIC_API_KEY. Company enrichment will be unavailable."
+  );
+}
 
 /**
  * POST /api/companies/search
@@ -60,11 +79,11 @@ companySearchRouter.post("/search", async (c) => {
       }
     }
 
-    const scraper = new AllabolagScraper();
-    const companyNames = await scraper.searchCompanies(
-      validatedParams, // This now includes industryDescription if provided by user, but scraper itself doesn't use it directly for URL building.
+    // Use the module-level allabolagScraper instance
+    const companyNames = await allabolagScraper.searchCompanies(
+      validatedParams,
       3, // Default maxPages
-      industryCodes // Pass the matched codes to the scraper
+      industryCodes
     );
 
     if (companyNames.length === 0) {
@@ -101,6 +120,14 @@ companySearchRouter.post("/search", async (c) => {
  * {"product": "...", "mission": "..."}
  */
 companySearchRouter.post("/enrich", async (c) => {
+  if (!companyEnrichmentService) {
+    throw new HTTPException(503, {
+      // Service Unavailable
+      message:
+        "Company enrichment service is not available due to missing API keys.",
+    });
+  }
+
   try {
     const body = await c.req.json();
     const { companyName, location }: CompanyEnrichRequest =
@@ -112,45 +139,33 @@ companySearchRouter.post("/enrich", async (c) => {
       }`
     );
 
-    const braveApiKey = process.env.BRAVE_API_KEY;
-    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-
-    if (!braveApiKey || !anthropicApiKey) {
-      throw new HTTPException(500, {
-        message:
-          "Missing required API keys for enrichment. Please set BRAVE_API_KEY and ANTHROPIC_API_KEY.",
-      });
-    }
-
-    const enrichmentService = new CompanyEnrichmentService(
-      braveApiKey,
-      anthropicApiKey
-    );
-
-    const enrichedData = await enrichmentService.enrichSingleCompany(
+    // Use the module-level companyEnrichmentService instance
+    const enrichedData = await companyEnrichmentService.enrichSingleCompany(
       companyName,
       location
     );
 
     if (!enrichedData) {
-      // As per "let it crash" philosophy, perhaps a 404 or specific error is better if enrichment fails.
-      // For now, returning empty product/mission as per schema if nothing found.
-      // The spec example implies success with data.
-      // Consider if a 404 is more appropriate if company cannot be enriched.
-      console.warn(`No enrichment data found for ${companyName}`);
-      return c.json(
-        { product: undefined, mission: undefined } as CompanyEnrichResponse,
-        200
-      );
+      // If enrichment fails or returns no data, send a 404
+      throw new HTTPException(404, {
+        message: `Could not find or enrich company: ${companyName}${
+          location ? ` in ${location}` : ""
+        }`,
+      });
     }
 
-    const response: CompanyEnrichResponse = {
+    // Construct the response based on the schema (which allows optional fields)
+    const responsePayload: CompanyEnrichResponse = {
       product: enrichedData.product_summary,
       mission: enrichedData.mission,
     };
 
+    // Validate the response against the schema before sending
+    const validatedResponse =
+      companyEnrichResponseSchema.parse(responsePayload);
+
     console.log(`Enrichment complete for: ${companyName}`);
-    return c.json(response, 200);
+    return c.json(validatedResponse, 200);
   } catch (error: any) {
     console.error("Company enrichment error:", error);
     if (error.name === "ZodError") {
