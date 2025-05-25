@@ -15,7 +15,17 @@ import { IndustryMatchingService } from "../services/industryMatchingService.js"
 const companySearchRouter = new Hono();
 
 // Instantiate services once
-const allabolagScraper = new AllabolagScraper(); // Assuming this was intended to be instantiated once
+console.log("[DEBUG src/routes/companySearch.ts] At service instantiation:");
+console.log(
+  "[DEBUG src/routes/companySearch.ts] BRAVE_API_KEY:",
+  process.env.BRAVE_API_KEY ? "SET" : "NOT SET"
+);
+console.log(
+  "[DEBUG src/routes/companySearch.ts] ANTHROPIC_API_KEY:",
+  process.env.ANTHROPIC_API_KEY ? "SET" : "NOT SET"
+);
+
+const allabolagScraper = new AllabolagScraper();
 const braveApiKey = process.env.BRAVE_API_KEY;
 const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
 
@@ -130,27 +140,24 @@ companySearchRouter.post("/enrich", async (c) => {
 
   try {
     const body = await c.req.json();
-    const { companyName, location }: CompanyEnrichRequest =
+    // Destructure only companyName, as location is removed from schema and request
+    const { companyName }: CompanyEnrichRequest =
       companyEnrichRequestSchema.parse(body);
 
     console.log(
-      `Starting company enrichment for: ${companyName}${
-        location ? ` in ${location}` : ""
-      }`
+      `Starting company enrichment for: ${companyName}` // Removed location from log
     );
 
-    // Use the module-level companyEnrichmentService instance
+    // Use the module-level companyEnrichmentService instance, passing only companyName
     const enrichedData = await companyEnrichmentService.enrichSingleCompany(
-      companyName,
-      location
+      companyName
+      // location parameter removed
     );
 
     if (!enrichedData) {
       // If enrichment fails or returns no data, send a 404
       throw new HTTPException(404, {
-        message: `Could not find or enrich company: ${companyName}${
-          location ? ` in ${location}` : ""
-        }`,
+        message: `Could not find or enrich company: ${companyName}`, // Removed location from message
       });
     }
 

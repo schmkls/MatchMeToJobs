@@ -102,11 +102,6 @@ export const companyEnrichRequestSchema = z.object({
     .string()
     .min(1, "Company name cannot be empty")
     .max(200, "Company name must be less than 200 characters"),
-  location: z
-    .string()
-    .min(1, "Location cannot be empty")
-    .max(100, "Location must be less than 100 characters")
-    .optional(), // Location is part of the spec, making it optional if sometimes only company name is enough
 });
 
 export type CompanyEnrichRequest = z.infer<typeof companyEnrichRequestSchema>;

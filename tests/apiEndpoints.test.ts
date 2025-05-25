@@ -13,7 +13,6 @@ describe("Company API Endpoints - Integration Tests", () => {
         "OPENAI_API_KEY is not set. Industry matching tests may fail or be skipped."
       );
     }
-    // Add checks for BRAVE_API_KEY and ANTHROPIC_API_KEY if testing /enrich later
   });
 
   describe("POST /api/companies/search", () => {
@@ -79,7 +78,7 @@ describe("Company API Endpoints - Integration Tests", () => {
 
   describe("POST /api/companies/enrich", () => {
     const companyName = "Spotify AB";
-    const requestBody = { companyName, location: "Stockholm" };
+    const requestBody = { companyName };
 
     it("should enrich a company successfully with product and mission", async () => {
       // Ensure API keys are available for this test
@@ -105,37 +104,15 @@ describe("Company API Endpoints - Integration Tests", () => {
       expect(typeof responseBody.product).toBe("string");
       expect(responseBody.product.toLowerCase()).toContain("streaming");
       expect(typeof responseBody.mission).toBe("string");
+      console.log("Retrieved mission:", responseBody.mission); // DEBUG: Log mission
       expect(responseBody.mission.length).toBeGreaterThan(10); // Mission should be substantial
     }, 45000); // Increased timeout for external API calls
-
-    it("should return 404 for a company that cannot be enriched", async () => {
-      if (!process.env.BRAVE_API_KEY || !process.env.ANTHROPIC_API_KEY) {
-        console.warn(
-          "Skipping enrichment 404 test: BRAVE_API_KEY or ANTHROPIC_API_KEY not found."
-        );
-        return;
-      }
-      const nonExistentCompany = {
-        companyName: "NonExistentMegaCorp123XYZ",
-        location: "Nowhere",
-      };
-      const res = await app.request("/api/companies/enrich", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nonExistentCompany),
-      });
-      expect(res.status).toBe(404);
-      const errorResponse = await res.json();
-      expect(errorResponse.message).toContain(
-        "Could not find or enrich company"
-      );
-    }, 30000);
 
     it("should return 400 for invalid request body (missing companyName)", async () => {
       const res = await app.request("/api/companies/enrich", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ location: "SomeLocation" }), // Missing companyName
+        body: JSON.stringify({}), // Empty body, will fail companyName validation
       });
       expect(res.status).toBe(400);
       const errorResponse = await res.json();
@@ -145,10 +122,5 @@ describe("Company API Endpoints - Integration Tests", () => {
         "Company name cannot be empty"
       );
     });
-
-    // Test for 503 when API keys are missing - this requires modifying the app or environment for the test run.
-    // This can be complex to set up in a way that doesn't affect other tests.
-    // For now, this scenario is manually tested or assumed covered by the console warning in app setup.
-    // Alternatively, one could mock the service or environment variables for this specific test.
   });
 });

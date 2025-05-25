@@ -2,6 +2,20 @@ import dotenv from "dotenv";
 // Load environment variables FIRST
 dotenv.config();
 
+console.log("[DEBUG src/index.ts] After dotenv.config():");
+console.log(
+  "[DEBUG src/index.ts] BRAVE_API_KEY:",
+  process.env.BRAVE_API_KEY ? "SET" : "NOT SET"
+);
+console.log(
+  "[DEBUG src/index.ts] ANTHROPIC_API_KEY:",
+  process.env.ANTHROPIC_API_KEY ? "SET" : "NOT SET"
+);
+console.log(
+  "[DEBUG src/index.ts] OPENAI_API_KEY:",
+  process.env.OPENAI_API_KEY ? "SET" : "NOT SET"
+);
+
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
@@ -151,16 +165,9 @@ app.get("/", (c) => {
             optional: false,
             description: "Name of the company to enrich",
           },
-          {
-            name: "location",
-            type: "string",
-            optional: true,
-            description: "Location of the company (for more specific search)",
-          },
         ],
         example_request: {
           companyName: "Spotify AB",
-          location: "Stockholm",
         },
         example_response: {
           product: "Music streaming service...",
