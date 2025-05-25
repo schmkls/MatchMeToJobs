@@ -1,120 +1,80 @@
-import { WebSearchService } from "./webSearchService.js";
-import { AIExtractionService } from "./aiExtractionService.js";
+import { OpenAIService } from "./OpenAIService.js";
 import type { EnrichedCompany } from "../schemas/companyData.js";
 
 export class CompanyEnrichmentService {
-  private webSearchService: WebSearchService;
-  private aiExtractionService: AIExtractionService;
+  private openAIService: OpenAIService;
 
-  constructor(braveApiKey: string, anthropicApiKey: string) {
-    this.webSearchService = new WebSearchService(braveApiKey);
-    this.aiExtractionService = new AIExtractionService(anthropicApiKey);
-  }
-
-  /**
-   * Enrich a list of company names with detailed information using focused extractors
-   */
-  async enrichCompanies(
-    companyNames: string[],
-    maxCompanies: number = 10
-  ): Promise<EnrichedCompany[]> {
-    const companiesToProcess = companyNames.slice(0, maxCompanies);
-    console.log(
-      `🚀 Enriching ${companiesToProcess.length} companies (limited from ${companyNames.length})`
-    );
-
-    const enrichedCompanies: EnrichedCompany[] = [];
-
-    for (const companyName of companiesToProcess) {
-      try {
-        console.log(`\n🔍 Processing: ${companyName}`);
-
-        const enrichedCompany = await this.enrichSingleCompany(companyName);
-        if (enrichedCompany) {
-          enrichedCompanies.push(enrichedCompany);
-        }
-
-        // Add delay between companies to respect rate limits
-        await this.delay(2000); // 2 second delay between companies
-      } catch (error) {
-        console.error(`❌ Failed to enrich ${companyName}:`, error);
-        // Continue with other companies even if one fails
-        enrichedCompanies.push({
-          company_name: companyName,
-        });
-      }
+  constructor(openaiApiKey: string) {
+    if (!openaiApiKey) {
+      // It's good practice to check for the key here as well,
+      // though OpenAIService also checks it.
+      throw new Error(
+        "OpenAI API key is required for CompanyEnrichmentService."
+      );
     }
-
-    return enrichedCompanies;
+    this.openAIService = new OpenAIService(openaiApiKey);
   }
 
   /**
-   * Enrich a single company with web search and focused AI extraction
+   * Enrich a single company using OpenAI to get mission and product summary.
+   * Location parameter is removed as per new requirements.
    */
   public async enrichSingleCompany(
-    companyName: string,
-    location?: string
+    companyName: string
   ): Promise<EnrichedCompany | null> {
-    const searchQuery = location ? `${companyName} ${location}` : companyName;
-    console.log(`  🌐 Searching web for: ${searchQuery}`);
+    if (!companyName || companyName.trim() === "") {
+      console.warn(
+        "[CompanyEnrichmentService] Company name is empty, cannot enrich."
+      );
+      return null;
+    }
 
-    // Step 1: Perform focused web searches
-    const searchResults = await this.webSearchService.searchCompanyInfo(
-      searchQuery
+    console.log(
+      `[CompanyEnrichmentService] Starting OpenAI enrichment for: ${companyName}`
     );
 
-    // Step 2: Extract text content for AI processing
-    const searchContent = {
-      mission: this.webSearchService.extractSearchContent(
-        searchResults.mission
-      ),
-      product: this.webSearchService.extractSearchContent(
-        searchResults.product
-      ),
-      jobs: this.webSearchService.extractSearchContent(searchResults.jobs),
-    };
+    try {
+      const companyInfo = await this.openAIService.getCompanyInfo(companyName);
 
-    console.log(`  🤖 Extracting structured data with focused extractors`);
+      if (!companyInfo.mission && !companyInfo.product) {
+        console.warn(
+          `[CompanyEnrichmentService] No information found by OpenAI for ${companyName}`
+        );
+        // Return an object with company name but no mission/product,
+        // or null, depending on desired behavior for "not found entirely"
+        return {
+          company_name: companyName,
+          // mission and product will be undefined by default
+        };
+      }
 
-    // Step 3: Use focused AI extractors
-    const extractedData = await this.aiExtractionService.extractCompanyData(
-      companyName,
-      searchContent
-    );
+      const enrichedCompany: EnrichedCompany = {
+        company_name: companyName,
+        mission: companyInfo.mission, // Will be undefined if not found
+        product_summary: companyInfo.product, // Will be undefined if not found
+      };
 
-    // Step 4: Combine all data into enriched company object
-    const enrichedCompany: EnrichedCompany = {
-      company_name: companyName,
-      mission: extractedData.mission?.mission,
-      product_summary: extractedData.product?.product_summary,
-      job_ads: extractedData.jobs?.job_ads,
-    };
-
-    console.log(`  ✅ Enriched: ${companyName}`);
-
-    return enrichedCompany;
+      console.log(
+        `[CompanyEnrichmentService] Enrichment complete for: ${companyName}`
+      );
+      return enrichedCompany;
+    } catch (error) {
+      console.error(
+        `[CompanyEnrichmentService] Failed to enrich ${companyName} using OpenAI:`,
+        error
+      );
+      // According to "let it crash" philosophy, we might re-throw or throw a new specific error.
+      // However, the previous logic would return a minimal company object or null.
+      // For now, returning a minimal object to align with previous partial success handling.
+      // This could be changed to throw error; if so, the route handler needs to manage it.
+      return {
+        company_name: companyName,
+        // mission and product_summary will be implicitly undefined
+      };
+    }
   }
 
-  /**
-   * Get summary statistics about the enrichment results
-   */
-  getEnrichmentStats(companies: EnrichedCompany[]): {
-    total: number;
-    withMission: number;
-    withProduct: number;
-    withJobs: number;
-  } {
-    return {
-      total: companies.length,
-      withMission: companies.filter(
-        (c) => c.mission && c.mission !== "not found"
-      ).length,
-      withProduct: companies.filter((c) => c.product_summary).length,
-      withJobs: companies.filter((c) => c.job_ads && c.job_ads.length > 0)
-        .length,
-    };
-  }
-
-  private delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  // enrichCompanies method is removed as the endpoint is for a single company.
+  // getEnrichmentStats method is removed as job_ads are gone and stats are simplified.
+  // private delay method is removed as it's no longer used.
 }

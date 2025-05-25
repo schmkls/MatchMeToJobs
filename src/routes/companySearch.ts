@@ -17,28 +17,20 @@ const companySearchRouter = new Hono();
 // Instantiate services once
 console.log("[DEBUG src/routes/companySearch.ts] At service instantiation:");
 console.log(
-  "[DEBUG src/routes/companySearch.ts] BRAVE_API_KEY:",
-  process.env.BRAVE_API_KEY ? "SET" : "NOT SET"
-);
-console.log(
-  "[DEBUG src/routes/companySearch.ts] ANTHROPIC_API_KEY:",
-  process.env.ANTHROPIC_API_KEY ? "SET" : "NOT SET"
+  "[DEBUG src/routes/companySearch.ts] OPENAI_API_KEY:",
+  process.env.OPENAI_API_KEY ? "SET" : "NOT SET"
 );
 
 const allabolagScraper = new AllabolagScraper();
-const braveApiKey = process.env.BRAVE_API_KEY;
-const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+const openaiApiKey = process.env.OPENAI_API_KEY;
 
 let companyEnrichmentService: CompanyEnrichmentService | null = null;
 
-if (braveApiKey && anthropicApiKey) {
-  companyEnrichmentService = new CompanyEnrichmentService(
-    braveApiKey,
-    anthropicApiKey
-  );
+if (openaiApiKey) {
+  companyEnrichmentService = new CompanyEnrichmentService(openaiApiKey);
 } else {
   console.warn(
-    "Missing BRAVE_API_KEY or ANTHROPIC_API_KEY. Company enrichment will be unavailable."
+    "Missing OPENAI_API_KEY. Company enrichment will be unavailable."
   );
 }
 
@@ -132,9 +124,8 @@ companySearchRouter.post("/search", async (c) => {
 companySearchRouter.post("/enrich", async (c) => {
   if (!companyEnrichmentService) {
     throw new HTTPException(503, {
-      // Service Unavailable
       message:
-        "Company enrichment service is not available due to missing API keys.",
+        "Company enrichment service is not available due to missing OPENAI_API_KEY.",
     });
   }
 
@@ -199,13 +190,10 @@ companySearchRouter.get("/health", (c) => {
     timestamp: new Date().toISOString(),
     services: {
       allabolag_scraper: "operational",
-      web_search_enrichment: process.env.BRAVE_API_KEY
+      openai_enrichment: process.env.OPENAI_API_KEY
         ? "configured"
         : "missing_api_key",
-      ai_extraction_enrichment: process.env.ANTHROPIC_API_KEY
-        ? "configured"
-        : "missing_api_key",
-      industry_code_matching: process.env.OPENAI_API_KEY // Added back
+      industry_code_matching: process.env.OPENAI_API_KEY
         ? "configured"
         : "missing_api_key",
     },
