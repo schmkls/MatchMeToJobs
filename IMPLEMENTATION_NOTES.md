@@ -234,20 +234,23 @@ Scrapes Swedish company data from Allabolag.se with advanced filtering.
 
 **Services**:
 
-- `src/services/webSearchService.ts` - Brave Search API integration
-- `src/services/aiExtractionService.ts` - Claude-based data extraction
+- `src/services/openAIService.ts` - OpenAI GPT-4o-mini with web search preview integration
 
 **Search Types**:
 
 - Mission: Company mission/vision/purpose
 - Product: Products/services description
-- Jobs: Job postings from LinkedIn and Swedish job sites
 
 **Performance**:
 
-- 1-second delay between search types per company
-- 2-second delay between companies
-- ~15-20 seconds for 5 companies total
+- ~5-10 seconds per company for enrichment
+- Simple, reliable results using OpenAI's web search capabilities
+
+**Implementation**:
+
+- Uses OpenAI's Responses API with gpt-4o-mini model
+- Integrated web search preview tool for accurate, up-to-date information
+- Clean, straightforward implementation without complex fallback mechanisms
 
 ### Company Enrichment ✅ COMPLETE
 
@@ -267,9 +270,7 @@ Orchestrates the full enrichment pipeline combining web search and AI extraction
 ## Environment Variables
 
 ```
-ANTHROPIC_API_KEY=your_anthropic_key
 OPENAI_API_KEY=your_openai_key
-BRAVE_API_KEY=your_brave_search_key
 PORT=4000
 ```
 

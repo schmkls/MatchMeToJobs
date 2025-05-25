@@ -82,10 +82,8 @@ describe("Company API Endpoints - Integration Tests", () => {
 
     it("should enrich a company successfully with product and mission", async () => {
       // Ensure API keys are available for this test
-      if (!process.env.BRAVE_API_KEY || !process.env.ANTHROPIC_API_KEY) {
-        console.warn(
-          "Skipping enrichment test: BRAVE_API_KEY or ANTHROPIC_API_KEY not found."
-        );
+      if (!process.env.OPENAI_API_KEY) {
+        console.log("Skipping enrichment test: OPENAI_API_KEY not found.");
         return;
       }
 

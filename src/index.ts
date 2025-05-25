@@ -4,14 +4,6 @@ dotenv.config();
 
 console.log("[DEBUG src/index.ts] After dotenv.config():");
 console.log(
-  "[DEBUG src/index.ts] BRAVE_API_KEY:",
-  process.env.BRAVE_API_KEY ? "SET" : "NOT SET"
-);
-console.log(
-  "[DEBUG src/index.ts] ANTHROPIC_API_KEY:",
-  process.env.ANTHROPIC_API_KEY ? "SET" : "NOT SET"
-);
-console.log(
   "[DEBUG src/index.ts] OPENAI_API_KEY:",
   process.env.OPENAI_API_KEY ? "SET" : "NOT SET"
 );
@@ -33,9 +25,7 @@ import { companySearchRouter } from "./routes/companySearch.js";
  * 3. Company enrichment (web search + AI extraction for mission & product)
  *
  * Environment variables required:
- * - ANTHROPIC_API_KEY: For AI company enrichment
- * - BRAVE_API_KEY: For web search during company enrichment
- * - OPENAI_API_KEY: For AI industry matching (embeddings)
+ * - OPENAI_API_KEY: For AI industry matching (embeddings) and company enrichment
  * - PORT: Server port (default: 4000)
  *
  * Main endpoints:
