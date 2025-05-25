@@ -1,87 +1,61 @@
 import { z } from "zod";
 
-/**
- * Job Search Parameters Schema
- *
- * Defines and validates all parameters for the /api/jobs/search endpoint
- */
-export const jobSearchParamsSchema = z
+export const companySearchQuerySchema = z
   .object({
-    // Company financial filters
     revenueFrom: z
       .number()
-      .min(-2213349, "Revenue from must be at least -2,213,349")
+      .min(-221349, "Revenue from must be at least -221,349")
       .max(192505000, "Revenue from must be at most 192,505,000")
       .optional(),
-
     revenueTo: z
       .number()
-      .min(-2213349, "Revenue to must be at least -2,213,349")
+      .min(-221349, "Revenue to must be at least -221,349")
       .max(192505000, "Revenue to must be at most 192,505,000")
       .optional(),
-
+    location: z
+      .string()
+      .min(1, "Location cannot be empty")
+      .max(100, "Location must be less than 100 characters")
+      .optional(), // Specification says "location (string)", implies optional if not always needed for a general search
     profitFrom: z
       .number()
       .min(-12153147, "Profit from must be at least -12,153,147")
       .max(109441000, "Profit from must be at most 109,441,000")
       .optional(),
-
     profitTo: z
       .number()
       .min(-12153147, "Profit to must be at least -12,153,147")
       .max(109441000, "Profit to must be at most 109,441,000")
       .optional(),
-
-    // Company size filters
     numEmployeesFrom: z
       .number()
       .min(0, "Number of employees from must be at least 0")
       .max(100000, "Number of employees from must be at most 100,000")
       .optional(),
-
     numEmployeesTo: z
       .number()
       .min(0, "Number of employees to must be at least 0")
       .max(100000, "Number of employees to must be at most 100,000")
       .optional(),
-
-    // Location filter
-    location: z
-      .string()
-      .min(1, "Location cannot be empty")
-      .max(100, "Location must be less than 100 characters")
-      .optional(),
-
-    // Sorting options
     sort: z
       .enum([
         "profitAsc",
         "profitDesc",
         "registrationDateDesc",
         "numEmployeesAsc",
+        "numEmployeesDesc",
         "revenueAsc",
         "revenueDesc",
       ])
-      .optional()
-      .default("profitAsc"),
-
-    // REQUIRED: What you're looking for
-    description: z
-      .string()
-      .min(10, "Description must be at least 10 characters long")
-      .max(1000, "Description must be less than 1000 characters"),
-
-    // NEW: Industry matching (automatically finds Swedish proffIndustryCode values)
-    // Examples: "software development", "healthcare", "construction", "restaurants"
+      .optional(),
     industryDescription: z
       .string()
-      .min(5, "Industry description must be at least 5 characters long")
+      .min(3, "Industry description must be at least 3 characters long")
       .max(500, "Industry description must be less than 500 characters")
       .optional(),
   })
   .refine(
     (data) => {
-      // Validate revenue range
       if (data.revenueFrom !== undefined && data.revenueTo !== undefined) {
         return data.revenueFrom <= data.revenueTo;
       }
@@ -94,7 +68,6 @@ export const jobSearchParamsSchema = z
   )
   .refine(
     (data) => {
-      // Validate profit range
       if (data.profitFrom !== undefined && data.profitTo !== undefined) {
         return data.profitFrom <= data.profitTo;
       }
@@ -107,7 +80,6 @@ export const jobSearchParamsSchema = z
   )
   .refine(
     (data) => {
-      // Validate employee count range
       if (
         data.numEmployeesFrom !== undefined &&
         data.numEmployeesTo !== undefined
@@ -123,4 +95,25 @@ export const jobSearchParamsSchema = z
     }
   );
 
-export type JobSearchParams = z.infer<typeof jobSearchParamsSchema>;
+export type CompanySearchQuery = z.infer<typeof companySearchQuerySchema>;
+
+export const companyEnrichRequestSchema = z.object({
+  companyName: z
+    .string()
+    .min(1, "Company name cannot be empty")
+    .max(200, "Company name must be less than 200 characters"),
+  location: z
+    .string()
+    .min(1, "Location cannot be empty")
+    .max(100, "Location must be less than 100 characters")
+    .optional(), // Location is part of the spec, making it optional if sometimes only company name is enough
+});
+
+export type CompanyEnrichRequest = z.infer<typeof companyEnrichRequestSchema>;
+
+export const companyEnrichResponseSchema = z.object({
+  product: z.string().optional(),
+  mission: z.string().optional(),
+});
+
+export type CompanyEnrichResponse = z.infer<typeof companyEnrichResponseSchema>;

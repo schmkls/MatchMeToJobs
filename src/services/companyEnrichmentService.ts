@@ -51,14 +51,16 @@ export class CompanyEnrichmentService {
   /**
    * Enrich a single company with web search and focused AI extraction
    */
-  private async enrichSingleCompany(
-    companyName: string
+  public async enrichSingleCompany(
+    companyName: string,
+    location?: string
   ): Promise<EnrichedCompany | null> {
-    console.log(`  🌐 Searching web for: ${companyName}`);
+    const searchQuery = location ? `${companyName} ${location}` : companyName;
+    console.log(`  🌐 Searching web for: ${searchQuery}`);
 
     // Step 1: Perform focused web searches
     const searchResults = await this.webSearchService.searchCompanyInfo(
-      companyName
+      searchQuery
     );
 
     // Step 2: Extract text content for AI processing

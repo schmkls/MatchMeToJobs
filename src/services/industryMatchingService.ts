@@ -1,22 +1,22 @@
 import { embed, embedMany, cosineSimilarity } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { z } from "zod";
+// import { z } from "zod"; // z is no longer needed if industryMatchSchema is removed
 import * as fs from "fs";
 import * as path from "path";
 
-// Schema for industry matching response
-const industryMatchSchema = z.object({
-  matches: z
-    .array(
-      z.object({
-        code: z.string(),
-        name: z.string(),
-        relevance: z.number().min(1).max(10),
-      })
-    )
-    .min(1)
-    .max(10),
-});
+// Schema for industry matching response (REMOVED as unused)
+// const industryMatchSchema = z.object({
+//   matches: z
+//     .array(
+//       z.object({
+//         code: z.string(),
+//         name: z.string(),
+//         relevance: z.number().min(1).max(10),
+//       })
+//     )
+//     .min(1)
+//     .max(10),
+// });
 
 interface EnrichedIndustryCode {
   code: string;

@@ -1,3 +1,62 @@
+# Implementation Notes
+
+This document outlines the implementation details and plan for the MatchMeToJobs project. The project aims to provide a service for searching companies and, in the future, job listings, and then enriching this data.
+
+## Current Refactoring Plan (Following SPECIFICATION.png)
+
+We are currently refactoring the API to align with the structure defined in `SPECIFICATION.png`. This involves separating the company search and enrichment functionalities into distinct endpoints.
+
+### Key Changes:
+
+1.  **Separation of Concerns:**
+    - `api/companies/search`: Will _only_ use Allabolag segmentation scraping to find companies based on specified criteria (revenue, location, profit, employee count, sort order). It will return a list of company names.
+    - `api/companies/enrich`: A new endpoint dedicated to enriching a single company. It will take a company name and location, search the web, and extract/return the company's mission and product summary.
+2.  **User Flow:** The new structure supports a two-step process:
+    - User searches for companies.
+    - User selects a company from the search results to view enriched details.
+3.  **Development Philosophy:**
+    - **No Fallback Methods:** Prioritize clear error handling over complex fallback mechanisms. If a process fails, it should crash, and we will address the root cause.
+    - **No Backwards Compatibility:** The refactoring will not maintain compatibility with the old API structure.
+    - **Service Reuse and Restructuring:** Existing services will be reused, restructured, or rewritten as needed to support the new endpoints.
+
+### Endpoints (as per SPECIFICATION.png):
+
+- **`api/companies/search`**
+
+  - **Description:** Uses Allabolag segmentation scraping to find companies.
+  - **Params:**
+    - `revenueFrom`, `revenueTo`
+    - `location` (string)
+    - `profitFrom`, `profitTo`
+    - `numEmployeesFrom`, `numEmployeesTo`
+    - `sort` ∈ {`profitAsc`, `profitDesc`, `registrationDateDesc`, `numEmployeesAsc`, `numEmployeesDesc`}
+  - **Example Response:** `{["Spotify AB", "GeoGuessr AB", "Anyfin AB"]}`
+
+- **`api/companies/enrich`**
+  - **Description:** Enriches a company by searching the web and extracting its mission and product summary.
+  - **Params:**
+    - `companyName`
+    - `location`
+  - **Example Response:** `{"product": "One of the worlds largest music, podcast and audio streaming services", "mission": "Our mission is to unlock the potential of human creativity—by giving a million creative artists the opportunity to live off their art and billions of fans the opportunity to enjoy and be inspired by it."}`
+
+### Future Endpoints (Not part of the current refactoring sprint):
+
+- `api/companies/jobs`
+- `api/companies/score`
+
+### Underlying Services (to be adapted/created):
+
+- Allabolag.se Segmentation Scraping
+- Company Enrichment (web search and extraction)
+- Extractors (LLM-based for mission, product description, etc.)
+- Company Job Ads Lookup (IMPLEMENT LATER)
+- Allabolag.se Single Company Enrichment (IMPLEMENT LATER)
+- General Job Ads Lookup (IMPLEMENT LATER)
+
+---
+
+## Previous Notes (To be reviewed and updated/removed as refactoring progresses)
+
 ## General
 
 We are implementing a server/service that searches for companies and provides ranking capabilities for jobs and companies.

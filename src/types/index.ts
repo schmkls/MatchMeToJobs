@@ -11,9 +11,11 @@ export interface JobSearchParams {
     | "profitDesc"
     | "registrationDateDesc"
     | "numEmployeesAsc"
+    | "numEmployeesDesc"
     | "revenueAsc"
     | "revenueDesc";
-  description: string;
+  description?: string;
+  industryDescription?: string;
 }
 
 export interface CompanyInfo {
