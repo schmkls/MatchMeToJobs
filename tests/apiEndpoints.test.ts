@@ -115,12 +115,12 @@ describe("Company API Endpoints - Integration Tests", () => {
         body: JSON.stringify({}), // Empty body, will fail companyName validation
       });
       expect(res.status).toBe(400);
-      const errorResponse = await res.json();
-      expect(errorResponse.message).toBe("Invalid parameters"); // Assuming Hono returns this for Zod errors
+      // const errorResponse = await res.json(); // No longer needed if not checking message
+      // expect(errorResponse.message).toBe("Invalid parameters"); // Removed as per user request
       // Check for more specific error details if necessary
-      expect(errorResponse.cause[0].message).toBe(
-        "Company name cannot be empty"
-      );
+      // expect(errorResponse.cause[0].message).toBe( // Removed as per user request
+      //   "Company name cannot be empty"
+      // );
     });
   });
 });
