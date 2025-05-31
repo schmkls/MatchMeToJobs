@@ -1,6 +1,6 @@
 # Implementation Notes
 
-This document outlines the implementation details and plan for the MatchMeToJobs project. The project aims to provide a service for searching companies and, in the future, job listings, and then enriching this data.
+This document outlines the implementation details and plan for the MatchMeToJobs backend. The project aims to provide a service for searching companies and, in the future, job listings, and then enriching this data.
 
 In this project we use simple, minimal code and dependencies, and priotize researching for pre-existing libraries rather than implementing logic ourselves.
 
@@ -40,3 +40,14 @@ The API enables users to first search for companies using various criteria and t
 - **Example Response:** `{"product": "One of the world's largest music, podcast and audio streaming services", "mission": "Our mission is to unlock the potential of human creativity—by giving a million creative artists the opportunity to live off their art and billions of fans the opportunity to enjoy and be inspired by it."}`
 - **Underlying Service:** `Company Enrichment (Web Search)`
   - Searches the web for the given company to find and extract its product description and mission statement.
+
+## Future implementation
+
+### Endpoint: `api/companies/score`
+
+- **Description:** Scores a company by comparing description and missing to user description and mission.
+- **Params:**
+  - `mission` (string)
+  - `product` (string)
+- **Example Response:** `{"productScore": "1", missionScore: null}`
+- **Underlying Service:** `CompanyScorer`

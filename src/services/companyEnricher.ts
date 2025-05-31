@@ -1,5 +1,5 @@
-import { OpenAIService } from "./OpenAIService.js";
-import type { EnrichedCompany } from "../schemas/companyData.js";
+import { OpenAIService } from "./OpenAI.js";
+import type { EnrichedCompany } from "@schemas/companyData";
 
 export class CompanyEnrichmentService {
   private openAIService: OpenAIService;

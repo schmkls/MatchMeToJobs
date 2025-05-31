@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import type { JobSearchParams } from "../types/index.js";
+import type { JobSearchParams } from "types/companySearch.types";
 
 export class AllabolagScraper {
   private baseUrl = "https://www.allabolag.se/segmentering";

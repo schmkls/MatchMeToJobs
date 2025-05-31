@@ -7,10 +7,15 @@ import {
   CompanyEnrichRequest,
   companyEnrichResponseSchema,
   CompanyEnrichResponse,
-} from "../schemas/companySchemas.js";
-import { AllabolagScraper } from "../services/allabolagScraper.js";
-import { CompanyEnrichmentService } from "../services/companyEnrichmentService.js";
-import { IndustryMatchingService } from "../services/industryMatchingService.js"; // Added back
+} from "@schemas/companySchemas";
+import {
+  CompanyScoreRequestQuery,
+  CompanyScoreResponse,
+} from "types/companyScore.types";
+import { AllabolagScraper } from "@services/allabolagScraper";
+import { CompanyEnrichmentService } from "@services/companyEnricher";
+import { IndustryMatchingService } from "@services/industryMatcher";
+import { CompanyScorerService } from "@services/companyScorer";
 
 const companySearchRouter = new Hono();
 
@@ -25,6 +30,7 @@ const allabolagScraper = new AllabolagScraper();
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
 let companyEnrichmentService: CompanyEnrichmentService | null = null;
+const companyScorerService = new CompanyScorerService();
 
 if (openaiApiKey) {
   companyEnrichmentService = new CompanyEnrichmentService(openaiApiKey);
@@ -209,6 +215,34 @@ companySearchRouter.post("/enrich", async (c) => {
     }
     throw new HTTPException(500, {
       message: "Internal server error",
+      cause: error.message,
+    });
+  }
+});
+
+// New GET /api/companies/score endpoint
+companySearchRouter.get("/score", async (c) => {
+  try {
+    const queryParams = c.req.query() as unknown as CompanyScoreRequestQuery;
+
+    // Basic validation (more robust validation can be added with Zod)
+    if (!queryParams.mission || !queryParams.product) {
+      throw new HTTPException(400, {
+        message: "Missing required query parameters: mission and product",
+      });
+    }
+
+    const scoreResponse: CompanyScoreResponse =
+      await companyScorerService.scoreCompany(queryParams);
+
+    return c.json(scoreResponse, 200);
+  } catch (error: any) {
+    console.error("Company scoring error:", error);
+    if (error instanceof HTTPException) {
+      throw error;
+    }
+    throw new HTTPException(500, {
+      message: "Internal server error during scoring",
       cause: error.message,
     });
   }
