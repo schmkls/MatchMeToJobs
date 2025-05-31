@@ -57,6 +57,41 @@ companySearchRouter.post("/search", async (c) => {
     const validatedParams: CompanySearchQuery =
       companySearchQuerySchema.parse(body);
 
+    // Validate that if one of a pair (From/To) is provided, the other must also be present
+    if (
+      (validatedParams.revenueTo !== undefined &&
+        validatedParams.revenueFrom === undefined) ||
+      (validatedParams.revenueFrom !== undefined &&
+        validatedParams.revenueTo === undefined)
+    ) {
+      throw new HTTPException(400, {
+        message:
+          "Both revenueFrom and revenueTo must be provided if one is present.",
+      });
+    }
+    if (
+      (validatedParams.profitTo !== undefined &&
+        validatedParams.profitFrom === undefined) ||
+      (validatedParams.profitFrom !== undefined &&
+        validatedParams.profitTo === undefined)
+    ) {
+      throw new HTTPException(400, {
+        message:
+          "Both profitFrom and profitTo must be provided if one is present.",
+      });
+    }
+    if (
+      (validatedParams.numEmployeesTo !== undefined &&
+        validatedParams.numEmployeesFrom === undefined) ||
+      (validatedParams.numEmployeesFrom !== undefined &&
+        validatedParams.numEmployeesTo === undefined)
+    ) {
+      throw new HTTPException(400, {
+        message:
+          "Both numEmployeesFrom and numEmployeesTo must be provided if one is present.",
+      });
+    }
+
     console.log("Starting company search with params:", validatedParams);
 
     let industryCodes: string[] = [];
