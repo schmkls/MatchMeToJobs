@@ -47,7 +47,9 @@ The API enables users to first search for companies using various criteria and t
 
 - **Description:** Scores a company by comparing description and missing to user description and mission.
 - **Params:**
-  - `mission` (string)
-  - `product` (string)
-- **Example Response:** `{"productScore": "1", missionScore: null}`
-- **Underlying Service:** `CompanyScorer`
+  - `userMission` (string)
+  - `userProduct` (string)
+  - `companyMission` (string)
+  - `companyProduct` (string)
+- **Example Response:** `{"llmMissionScore": 0.85, "llmProductScore": 0.9, "ceMissionScore": 0.78, "ceProductScore": 0.82}`
+- **Underlying Service:** `CompanyScorerService`

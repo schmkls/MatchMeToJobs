@@ -164,6 +164,44 @@ app.get("/", (c) => {
           mission: "To unlock the potential of human creativity...",
         },
       },
+      "GET /api/companies/score": {
+        description:
+          "Scores a company by comparing its mission and product with user preferences using LLM and Cross-Encoder models.",
+        parameters: [
+          {
+            name: "userMission",
+            type: "string",
+            optional: false,
+            description: "User's desired company mission.",
+          },
+          {
+            name: "userProduct",
+            type: "string",
+            optional: false,
+            description: "User's desired company product/service category.",
+          },
+          {
+            name: "companyMission",
+            type: "string",
+            optional: false,
+            description: "The company's actual mission statement.",
+          },
+          {
+            name: "companyProduct",
+            type: "string",
+            optional: false,
+            description: "The company's actual product/service description.",
+          },
+        ],
+        example_request_url_params:
+          "?userMission=Enable%20artists&userProduct=Audio%20streaming&companyMission=Empower%20creators%20globally&companyProduct=Platform%20for%20digital%20audio",
+        example_response: {
+          llmMissionScore: 0.85,
+          llmProductScore: 0.9,
+          ceMissionScore: 0.78,
+          ceProductScore: 0.82,
+        },
+      },
       "GET /api/companies/health": {
         description: "Health check and service status",
       },

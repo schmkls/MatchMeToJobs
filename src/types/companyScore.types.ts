@@ -1,9 +1,13 @@
 export interface CompanyScoreRequestQuery {
-  mission: string;
-  product: string;
+  userMission: string;
+  userProduct: string;
+  companyMission: string;
+  companyProduct: string;
 }
 
 export interface CompanyScoreResponse {
-  productScore: string | null;
-  missionScore: string | null;
+  llmMissionScore: number | null;
+  llmProductScore: number | null;
+  ceMissionScore: number | null;
+  ceProductScore: number | null;
 }
