@@ -7,10 +7,17 @@ import { generateObject } from "ai";
 import { z } from "zod";
 import { defaultModel } from "@lib/llmModels";
 
+// Define a more specific type for the cross-encoder pipeline
+interface CrossEncoderPipeline extends Pipeline {
+  (text: string, options: { text_pair: string }): Promise<
+    Array<{ score: number }> | { score: number } | number
+  >;
+}
+
 // Initialize the cross-encoder pipeline
 // We use a static variable to ensure the model is loaded only once.
-let crossEncoderPipeline: Pipeline | null = null;
-async function getCrossEncoder() {
+let crossEncoderPipeline: CrossEncoderPipeline | null = null;
+async function getCrossEncoder(): Promise<CrossEncoderPipeline> {
   if (!crossEncoderPipeline) {
     try {
       // Using a model known for semantic similarity and compatible with transformers.js
@@ -18,11 +25,11 @@ async function getCrossEncoder() {
       // The model will output a score, often for a "positive" or "related" class if not directly similarity.
       // We might need to adjust based on the specific model's output structure.
       // Xenova/ms-marco-MiniLM-L-6-v2-fused is a good candidate.
-      crossEncoderPipeline = await pipeline(
+      crossEncoderPipeline = (await pipeline(
         "text-classification",
         "Xenova/ms-marco-MiniLM-L-6-v2-fused",
         { quantized: true }
-      );
+      )) as CrossEncoderPipeline;
     } catch (error) {
       console.error("Failed to load cross-encoder model:", error);
       throw new Error("Failed to load cross-encoder model");
@@ -108,30 +115,30 @@ export class CompanyScorerService {
       }
     }
 
+    // Define a helper function to extract scores from CE results
+    const extractCeScore = (result: any): number | null => {
+      if (
+        Array.isArray(result) &&
+        result.length > 0 &&
+        typeof result[0].score === "number"
+      ) {
+        return result[0].score;
+      } else if (typeof result === "number") {
+        return result;
+      } else if (result && typeof result.score === "number") {
+        return result.score;
+      }
+      console.warn("Unexpected CE result format:", result);
+      return null;
+    };
+
     // --- Cross-Encoder Scoring ---
     if (userMission && companyMission) {
       try {
         const ce = await getCrossEncoder();
-        const missionPair = [userMission, companyMission] as [string, string];
-        const ceMissionResult = await ce(missionPair[0], {
-          text_pair: missionPair[1],
+        const ceMissionResult = await ce(userMission, {
+          text_pair: companyMission,
         });
-
-        const extractCeScore = (result: any): number | null => {
-          if (
-            Array.isArray(result) &&
-            result.length > 0 &&
-            typeof result[0].score === "number"
-          ) {
-            return result[0].score;
-          } else if (typeof result === "number") {
-            return result;
-          } else if (result && typeof result.score === "number") {
-            return result.score;
-          }
-          console.warn("Unexpected CE result format:", result);
-          return null;
-        };
 
         ceMissionScore = extractCeScore(ceMissionResult);
         if (
@@ -153,28 +160,9 @@ export class CompanyScorerService {
     if (userProduct && companyProduct) {
       try {
         const ce = await getCrossEncoder();
-        const productPair = [userProduct, companyProduct] as [string, string];
-        const ceProductResult = await ce(productPair[0], {
-          text_pair: productPair[1],
+        const ceProductResult = await ce(userProduct, {
+          text_pair: companyProduct,
         });
-
-        // Re-using extractCeScore defined above. Ensure it is accessible or redefine if needed.
-        const extractCeScore = (result: any): number | null => {
-          // Definition duplicated for clarity if blocks are moved
-          if (
-            Array.isArray(result) &&
-            result.length > 0 &&
-            typeof result[0].score === "number"
-          ) {
-            return result[0].score;
-          } else if (typeof result === "number") {
-            return result;
-          } else if (result && typeof result.score === "number") {
-            return result.score;
-          }
-          console.warn("Unexpected CE result format:", result);
-          return null;
-        };
 
         ceProductScore = extractCeScore(ceProductResult);
         if (

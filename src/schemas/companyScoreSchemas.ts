@@ -2,16 +2,16 @@ import { z } from "zod";
 
 export const companyScoreRequestQuerySchema = z
   .object({
-    userMission: z.string().min(1, "User mission cannot be empty").optional(),
-    userProduct: z.string().min(1, "User product cannot be empty").optional(),
+    userMission: z.string().min(1, "User mission cannot be empty").nullable(),
+    userProduct: z.string().min(1, "User product cannot be empty").nullable(),
     companyMission: z
       .string()
       .min(1, "Company mission cannot be empty")
-      .optional(),
+      .nullable(),
     companyProduct: z
       .string()
       .min(1, "Company product cannot be empty")
-      .optional(),
+      .nullable(),
   })
   .superRefine((data, ctx) => {
     const { userMission, userProduct, companyMission, companyProduct } = data;

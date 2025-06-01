@@ -221,13 +221,13 @@ companyRouter.post("/enrich", async (c) => {
   }
 });
 
-// New GET /api/companies/score endpoint
-companyRouter.get("/score", async (c) => {
+// Convert from GET to POST for /api/companies/score endpoint
+companyRouter.post("/score", async (c) => {
   try {
-    const queryParams = c.req.query();
-    // Validate query parameters using Zod
+    const body = await c.req.json();
+    // Validate request body using Zod
     const validatedParams: CompanyScoreRequestQuery =
-      companyScoreRequestQuerySchema.parse(queryParams);
+      companyScoreRequestQuerySchema.parse(body);
 
     const scoreResponse: CompanyScoreResponse = // Type assertion for clarity, ensure service returns this
       await companyScorerService.scoreCompany(validatedParams); // Pass validatedParams
@@ -241,7 +241,7 @@ companyRouter.get("/score", async (c) => {
     // Add ZodError handling
     if (error.name === "ZodError") {
       throw new HTTPException(400, {
-        message: "Invalid query parameters",
+        message: "Invalid request body",
         cause: error.errors,
       });
     }
