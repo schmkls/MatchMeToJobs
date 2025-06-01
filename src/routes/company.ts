@@ -8,7 +8,7 @@ import {
   companyEnrichResponseSchema,
   CompanyEnrichResponse,
 } from "@schemas/companySchemas";
-import { CompanyScoreResponse } from "types/companyScore.types";
+import type { CompanyScoreResponse } from "@appTypes/companyScore.types";
 import {
   companyScoreRequestQuerySchema,
   CompanyScoreRequestQuery,
@@ -228,13 +228,6 @@ companyRouter.get("/score", async (c) => {
     // Validate query parameters using Zod
     const validatedParams: CompanyScoreRequestQuery =
       companyScoreRequestQuerySchema.parse(queryParams);
-
-    // Basic validation (more robust validation can be added with Zod)
-    // if (!queryParams.userMission || !queryParams.userProduct) { // Commented out, Zod handles this
-    //   throw new HTTPException(400, {
-    //     message: "Missing required query parameters: mission and product",
-    //   });
-    // }
 
     const scoreResponse: CompanyScoreResponse = // Type assertion for clarity, ensure service returns this
       await companyScorerService.scoreCompany(validatedParams); // Pass validatedParams

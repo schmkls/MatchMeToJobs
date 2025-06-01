@@ -13,13 +13,14 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "types/*": ["types/*"],
+      "@lib/*": ["lib/*"],
+      "@appTypes/*": ["types/*"],
       "@services/*": ["services/*"],
       "@schemas/*": ["schemas/*"],
       "@routes/*": ["routes/*"],
       "@data/*": ["data/*"],
       "@project/*": ["./*"],
-      "*": ["node_modules/*", "src/types/*"]
+      "*": ["node_modules/*"]
     },
     "resolveJsonModule": true,
     "declaration": true,

@@ -1,12 +1,11 @@
-import { Anthropic } from "@ai-sdk/anthropic";
 import { pipeline, Pipeline } from "@xenova/transformers";
-import {
+import type {
   CompanyScoreRequestQuery,
   CompanyScoreResponse,
-} from "types/companyScore.types";
-
-// Initialize Anthropic. ANTHROPIC_API_KEY should be in .env
-const anthropic = new Anthropic();
+} from "@appTypes/companyScore.types";
+import { generateObject } from "ai";
+import { z } from "zod";
+import { defaultModel } from "@lib/llmModels";
 
 // Initialize the cross-encoder pipeline
 // We use a static variable to ensure the model is loaded only once.
@@ -44,69 +43,68 @@ export class CompanyScorerService {
     let ceMissionScore: number | null = null;
     let ceProductScore: number | null = null;
 
+    const scoreSchema = z.object({
+      score: z
+        .number()
+        .min(0)
+        .max(1)
+        .describe("The similarity score between 0.0 and 1.0."),
+    });
+
     // --- LLM Scoring (Anthropic) ---
     // Only score mission if both userMission and companyMission are provided
     if (userMission && companyMission) {
       try {
-        const missionPrompt = `CONTEXT: You are an expert in evaluating the semantic similarity between a user\'s desired company mission and an actual company\'s mission statement.
-        User\'s desired mission: "${userMission}"
-        Company\'s actual mission: "${companyMission}"
-        TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match.
-        OUTPUT: Respond ONLY with the numerical score (e.g., 0.75).`;
+        const missionPrompt =
+          "CONTEXT: You are an expert in evaluating the semantic similarity between a user's desired company mission and an actual company's mission statement." +
+          "\n" +
+          `User's desired mission: "${userMission}"` +
+          "\n" +
+          `Company's actual mission: "${companyMission}"` +
+          "\n" +
+          "TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match." +
+          "\n" +
+          'OUTPUT: Respond with a JSON object containing a single key "score" with the numerical score (e.g., {"score": 0.75}).';
 
-        const missionResult = await anthropic.generateText({
-          modelId: "claude-3-haiku-20240307",
+        const { object } = await generateObject({
+          model: defaultModel,
+          schema: scoreSchema,
           prompt: missionPrompt,
         });
-        llmMissionScore = parseFloat(missionResult.text.trim());
-        if (
-          isNaN(llmMissionScore) ||
-          llmMissionScore < 0 ||
-          llmMissionScore > 1
-        ) {
-          console.error("Invalid LLM mission score:", missionResult.text);
-          // Set to null instead of throwing, or re-throw if it should be a hard error for malformed LLM output
-          llmMissionScore = null;
-          // Consider if a malformed LLM response for an *attempted* score should be a partial error or just result in null.
-          // For now, setting to null to allow other scores to proceed.
-          console.warn(
-            "LLM mission scoring returned an invalid format, resulting in null score."
-          );
-        }
+        llmMissionScore = object.score;
       } catch (error) {
         console.error("Error during LLM mission scoring:", error);
-        // llmMissionScore remains null
+        console.warn(
+          "LLM mission scoring failed or returned an invalid format, resulting in null score."
+        );
       }
     }
 
     // Only score product if both userProduct and companyProduct are provided
     if (userProduct && companyProduct) {
       try {
-        const productPrompt = `CONTEXT: You are an expert in evaluating the semantic similarity between a user\'s desired company product/service category and an actual company\'s product/service description.
-        User\'s desired product/service category: "${userProduct}"
-        Company\'s actual product/service: "${companyProduct}"
-        TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match.
-        OUTPUT: Respond ONLY with the numerical score (e.g., 0.8).`;
+        const productPrompt =
+          "CONTEXT: You are an expert in evaluating the semantic similarity between a user's desired company product/service category and an actual company's product/service description." +
+          "\n" +
+          `User's desired product/service category: "${userProduct}"` +
+          "\n" +
+          `Company's actual product/service: "${companyProduct}"` +
+          "\n" +
+          "TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match." +
+          "\n" +
+          'OUTPUT: Respond with a JSON object containing a single key "score" with the numerical score (e.g., {"score": 0.8}).';
 
-        const productResult = await anthropic.generateText({
-          modelId: "claude-3-haiku-20240307",
+        const { object } = await generateObject({
+          model: defaultModel,
+          schema: scoreSchema,
           prompt: productPrompt,
         });
-        llmProductScore = parseFloat(productResult.text.trim());
-        if (
-          isNaN(llmProductScore) ||
-          llmProductScore < 0 ||
-          llmProductScore > 1
-        ) {
-          console.error("Invalid LLM product score:", productResult.text);
-          llmProductScore = null;
-          console.warn(
-            "LLM product scoring returned an invalid format, resulting in null score."
-          );
-        }
+        llmProductScore = object.score;
       } catch (error) {
         console.error("Error during LLM product scoring:", error);
-        // llmProductScore remains null
+        console.warn(
+          "LLM product scoring failed or returned an invalid format, resulting in null score."
+        );
       }
     }
 
@@ -191,12 +189,8 @@ export class CompanyScorerService {
         }
       } catch (error) {
         console.error("Error during Cross-Encoder product scoring:", error);
-        // ceProductScore remains null
       }
     }
-
-    // Removed the final check that throws an error if any score is null,
-    // as null scores are now acceptable if inputs are missing.
 
     return {
       llmMissionScore,
