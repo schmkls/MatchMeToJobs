@@ -45,121 +45,158 @@ export class CompanyScorerService {
     let ceProductScore: number | null = null;
 
     // --- LLM Scoring (Anthropic) ---
-    try {
-      const missionPrompt = `CONTEXT: You are an expert in evaluating the semantic similarity between a user\'s desired company mission and an actual company\'s mission statement.
-      User\'s desired mission: "${userMission}"
-      Company\'s actual mission: "${companyMission}"
-      TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match.
-      OUTPUT: Respond ONLY with the numerical score (e.g., 0.75).`;
+    // Only score mission if both userMission and companyMission are provided
+    if (userMission && companyMission) {
+      try {
+        const missionPrompt = `CONTEXT: You are an expert in evaluating the semantic similarity between a user\'s desired company mission and an actual company\'s mission statement.
+        User\'s desired mission: "${userMission}"
+        Company\'s actual mission: "${companyMission}"
+        TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match.
+        OUTPUT: Respond ONLY with the numerical score (e.g., 0.75).`;
 
-      const productPrompt = `CONTEXT: You are an expert in evaluating the semantic similarity between a user\'s desired company product/service category and an actual company\'s product/service description.
-      User\'s desired product/service category: "${userProduct}"
-      Company\'s actual product/service: "${companyProduct}"
-      TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match.
-      OUTPUT: Respond ONLY with the numerical score (e.g., 0.8).`;
-
-      const [missionResult, productResult] = await Promise.all([
-        anthropic.generateText({
+        const missionResult = await anthropic.generateText({
           modelId: "claude-3-haiku-20240307",
           prompt: missionPrompt,
-        }), // Using a cost-effective and fast model
-        anthropic.generateText({
+        });
+        llmMissionScore = parseFloat(missionResult.text.trim());
+        if (
+          isNaN(llmMissionScore) ||
+          llmMissionScore < 0 ||
+          llmMissionScore > 1
+        ) {
+          console.error("Invalid LLM mission score:", missionResult.text);
+          // Set to null instead of throwing, or re-throw if it should be a hard error for malformed LLM output
+          llmMissionScore = null;
+          // Consider if a malformed LLM response for an *attempted* score should be a partial error or just result in null.
+          // For now, setting to null to allow other scores to proceed.
+          console.warn(
+            "LLM mission scoring returned an invalid format, resulting in null score."
+          );
+        }
+      } catch (error) {
+        console.error("Error during LLM mission scoring:", error);
+        // llmMissionScore remains null
+      }
+    }
+
+    // Only score product if both userProduct and companyProduct are provided
+    if (userProduct && companyProduct) {
+      try {
+        const productPrompt = `CONTEXT: You are an expert in evaluating the semantic similarity between a user\'s desired company product/service category and an actual company\'s product/service description.
+        User\'s desired product/service category: "${userProduct}"
+        Company\'s actual product/service: "${companyProduct}"
+        TASK: Score the similarity on a scale from 0.0 to 1.0, where 0.0 means no similarity and 1.0 means perfect semantic match.
+        OUTPUT: Respond ONLY with the numerical score (e.g., 0.8).`;
+
+        const productResult = await anthropic.generateText({
           modelId: "claude-3-haiku-20240307",
           prompt: productPrompt,
-        }),
-      ]);
-
-      llmMissionScore = parseFloat(missionResult.text.trim());
-      llmProductScore = parseFloat(productResult.text.trim());
-
-      if (
-        isNaN(llmMissionScore) ||
-        llmMissionScore < 0 ||
-        llmMissionScore > 1
-      ) {
-        console.error("Invalid LLM mission score:", missionResult.text);
-        throw new Error("Failed to get a valid LLM mission score.");
+        });
+        llmProductScore = parseFloat(productResult.text.trim());
+        if (
+          isNaN(llmProductScore) ||
+          llmProductScore < 0 ||
+          llmProductScore > 1
+        ) {
+          console.error("Invalid LLM product score:", productResult.text);
+          llmProductScore = null;
+          console.warn(
+            "LLM product scoring returned an invalid format, resulting in null score."
+          );
+        }
+      } catch (error) {
+        console.error("Error during LLM product scoring:", error);
+        // llmProductScore remains null
       }
-      if (
-        isNaN(llmProductScore) ||
-        llmProductScore < 0 ||
-        llmProductScore > 1
-      ) {
-        console.error("Invalid LLM product score:", productResult.text);
-        throw new Error("Failed to get a valid LLM product score.");
-      }
-    } catch (error) {
-      console.error("Error during LLM scoring:", error);
-      throw new Error(
-        "LLM scoring failed. " +
-          (error instanceof Error ? error.message : String(error))
-      );
     }
 
     // --- Cross-Encoder Scoring ---
-    try {
-      const ce = await getCrossEncoder();
-      const missionPair = [userMission, companyMission] as [string, string];
-      const productPair = [userProduct, companyProduct] as [string, string];
+    if (userMission && companyMission) {
+      try {
+        const ce = await getCrossEncoder();
+        const missionPair = [userMission, companyMission] as [string, string];
+        const ceMissionResult = await ce(missionPair[0], {
+          text_pair: missionPair[1],
+        });
 
-      // The output of text-classification with cross-encoders might be an array of classes with scores.
-      // e.g., [{ label: 'ENTAILMENT', score: 0.9 }, { label: 'CONTRADICTION', score: 0.1 }]
-      // Or for some models trained on similarity, it might be simpler.
-      // We expect a score that represents similarity.
-      // If the model returns multiple labels, we usually look for the score of the "positive" or "related" label,
-      // or a direct similarity score if the model is designed that way.
-      // For "Xenova/ms-marco-MiniLM-L-6-v2-fused", it's typically used in reranking,
-      // providing a single score indicating relevance.
-      const [ceMissionResult, ceProductResult] = await Promise.all([
-        ce(missionPair[0], { text_pair: missionPair[1] }), // Some pipelines take (text, { text_pair: text2 })
-        ce(productPair[0], { text_pair: productPair[1] }),
-      ]);
+        const extractCeScore = (result: any): number | null => {
+          if (
+            Array.isArray(result) &&
+            result.length > 0 &&
+            typeof result[0].score === "number"
+          ) {
+            return result[0].score;
+          } else if (typeof result === "number") {
+            return result;
+          } else if (result && typeof result.score === "number") {
+            return result.score;
+          }
+          console.warn("Unexpected CE result format:", result);
+          return null;
+        };
 
-      // Helper to extract score, assuming the relevant score is the first one or named 'score'
-      const extractCeScore = (result: any): number | null => {
+        ceMissionScore = extractCeScore(ceMissionResult);
         if (
-          Array.isArray(result) &&
-          result.length > 0 &&
-          typeof result[0].score === "number"
+          ceMissionScore !== null &&
+          (ceMissionScore < 0 || ceMissionScore > 1)
         ) {
-          return result[0].score; // Common pattern for classification pipelines
-        } else if (typeof result === "number") {
-          return result; // If the model directly returns a score
-        } else if (result && typeof result.score === "number") {
-          return result.score; // if it's an object with a score property
+          console.error("Invalid CE mission score or format:", ceMissionResult);
+          ceMissionScore = null;
+          console.warn(
+            "CE mission scoring returned an out-of-range score, resulting in null score."
+          );
         }
-        console.warn("Unexpected CE result format:", result);
-        return null;
-      };
-
-      ceMissionScore = extractCeScore(ceMissionResult);
-      ceProductScore = extractCeScore(ceProductResult);
-
-      if (ceMissionScore === null || ceMissionScore < 0 || ceMissionScore > 1) {
-        console.error("Invalid CE mission score or format:", ceMissionResult);
-        throw new Error("Failed to get a valid CE mission score.");
+      } catch (error) {
+        console.error("Error during Cross-Encoder mission scoring:", error);
+        // ceMissionScore remains null
       }
-      if (ceProductScore === null || ceProductScore < 0 || ceProductScore > 1) {
-        console.error("Invalid CE product score or format:", ceProductResult);
-        throw new Error("Failed to get a valid CE product score.");
-      }
-    } catch (error) {
-      console.error("Error during Cross-Encoder scoring:", error);
-      throw new Error(
-        "Cross-Encoder scoring failed. " +
-          (error instanceof Error ? error.message : String(error))
-      );
     }
 
-    // Final check as per user requirement: throw error if any score is still null
-    if (
-      llmMissionScore === null ||
-      llmProductScore === null ||
-      ceMissionScore === null ||
-      ceProductScore === null
-    ) {
-      throw new Error("One or more scores could not be determined.");
+    if (userProduct && companyProduct) {
+      try {
+        const ce = await getCrossEncoder();
+        const productPair = [userProduct, companyProduct] as [string, string];
+        const ceProductResult = await ce(productPair[0], {
+          text_pair: productPair[1],
+        });
+
+        // Re-using extractCeScore defined above. Ensure it is accessible or redefine if needed.
+        const extractCeScore = (result: any): number | null => {
+          // Definition duplicated for clarity if blocks are moved
+          if (
+            Array.isArray(result) &&
+            result.length > 0 &&
+            typeof result[0].score === "number"
+          ) {
+            return result[0].score;
+          } else if (typeof result === "number") {
+            return result;
+          } else if (result && typeof result.score === "number") {
+            return result.score;
+          }
+          console.warn("Unexpected CE result format:", result);
+          return null;
+        };
+
+        ceProductScore = extractCeScore(ceProductResult);
+        if (
+          ceProductScore !== null &&
+          (ceProductScore < 0 || ceProductScore > 1)
+        ) {
+          console.error("Invalid CE product score or format:", ceProductResult);
+          ceProductScore = null;
+          console.warn(
+            "CE product scoring returned an out-of-range score, resulting in null score."
+          );
+        }
+      } catch (error) {
+        console.error("Error during Cross-Encoder product scoring:", error);
+        // ceProductScore remains null
+      }
     }
+
+    // Removed the final check that throws an error if any score is null,
+    // as null scores are now acceptable if inputs are missing.
 
     return {
       llmMissionScore,

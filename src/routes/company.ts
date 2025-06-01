@@ -8,16 +8,17 @@ import {
   companyEnrichResponseSchema,
   CompanyEnrichResponse,
 } from "@schemas/companySchemas";
+import { CompanyScoreResponse } from "types/companyScore.types";
 import {
+  companyScoreRequestQuerySchema,
   CompanyScoreRequestQuery,
-  CompanyScoreResponse,
-} from "types/companyScore.types";
+} from "@schemas/companyScoreSchemas";
 import { AllabolagScraper } from "@services/allabolagScraper";
 import { CompanyEnrichmentService } from "@services/companyEnricher";
 import { IndustryMatchingService } from "@services/industryMatcher";
 import { CompanyScorerService } from "@services/companyScorer";
 
-const companySearchRouter = new Hono();
+const companyRouter = new Hono();
 
 // Instantiate services once
 console.log("[DEBUG src/routes/companySearch.ts] At service instantiation:");
@@ -57,7 +58,7 @@ if (openaiApiKey) {
  * EXAMPLE RESPONSE:
  * ["Spotify AB", "GeoGuessr AB", "Anyfin AB"]
  */
-companySearchRouter.post("/search", async (c) => {
+companyRouter.post("/search", async (c) => {
   try {
     const body = await c.req.json();
     const validatedParams: CompanySearchQuery =
@@ -162,7 +163,7 @@ companySearchRouter.post("/search", async (c) => {
  * EXAMPLE RESPONSE:
  * {"product": "...", "mission": "..."}
  */
-companySearchRouter.post("/enrich", async (c) => {
+companyRouter.post("/enrich", async (c) => {
   if (!companyEnrichmentService) {
     throw new HTTPException(503, {
       message:
@@ -221,25 +222,35 @@ companySearchRouter.post("/enrich", async (c) => {
 });
 
 // New GET /api/companies/score endpoint
-companySearchRouter.get("/score", async (c) => {
+companyRouter.get("/score", async (c) => {
   try {
-    const queryParams = c.req.query() as unknown as CompanyScoreRequestQuery;
+    const queryParams = c.req.query();
+    // Validate query parameters using Zod
+    const validatedParams: CompanyScoreRequestQuery =
+      companyScoreRequestQuerySchema.parse(queryParams);
 
     // Basic validation (more robust validation can be added with Zod)
-    if (!queryParams.mission || !queryParams.product) {
-      throw new HTTPException(400, {
-        message: "Missing required query parameters: mission and product",
-      });
-    }
+    // if (!queryParams.userMission || !queryParams.userProduct) { // Commented out, Zod handles this
+    //   throw new HTTPException(400, {
+    //     message: "Missing required query parameters: mission and product",
+    //   });
+    // }
 
-    const scoreResponse: CompanyScoreResponse =
-      await companyScorerService.scoreCompany(queryParams);
+    const scoreResponse: CompanyScoreResponse = // Type assertion for clarity, ensure service returns this
+      await companyScorerService.scoreCompany(validatedParams); // Pass validatedParams
 
     return c.json(scoreResponse, 200);
   } catch (error: any) {
     console.error("Company scoring error:", error);
     if (error instanceof HTTPException) {
       throw error;
+    }
+    // Add ZodError handling
+    if (error.name === "ZodError") {
+      throw new HTTPException(400, {
+        message: "Invalid query parameters",
+        cause: error.errors,
+      });
     }
     throw new HTTPException(500, {
       message: "Internal server error during scoring",
@@ -253,7 +264,7 @@ companySearchRouter.get("/score", async (c) => {
  *
  * Health check endpoint. Now includes OpenAI API key status.
  */
-companySearchRouter.get("/health", (c) => {
+companyRouter.get("/health", (c) => {
   return c.json({
     status: "healthy",
     timestamp: new Date().toISOString(),
@@ -269,4 +280,4 @@ companySearchRouter.get("/health", (c) => {
   });
 });
 
-export { companySearchRouter };
+export { companyRouter as companySearchRouter };

@@ -14,7 +14,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 import { HTTPException } from "hono/http-exception";
-import { companySearchRouter } from "./routes/companySearch.js";
+import { companySearchRouter } from "./routes/company.js";
 
 /**
  * MatchMeToJobs API Server
@@ -166,40 +166,46 @@ app.get("/", (c) => {
       },
       "GET /api/companies/score": {
         description:
-          "Scores a company by comparing its mission and product with user preferences using LLM and Cross-Encoder models.",
+          "Scores a company by comparing its mission and product with user preferences using LLM and Cross-Encoder models. " +
+          "Requires at least one complete pair of parameters (e.g., userMission and companyMission, or userProduct and companyProduct). " +
+          "If a pair is provided (e.g., userMission), its counterpart (e.g., companyMission) must also be provided.",
         parameters: [
           {
             name: "userMission",
             type: "string",
-            optional: false,
-            description: "User's desired company mission.",
+            optional: true,
+            description:
+              "User's desired company mission. If provided, companyMission is also required.",
           },
           {
             name: "userProduct",
             type: "string",
-            optional: false,
-            description: "User's desired company product/service category.",
+            optional: true,
+            description:
+              "User's desired company product/service category. If provided, companyProduct is also required.",
           },
           {
             name: "companyMission",
             type: "string",
-            optional: false,
-            description: "The company's actual mission statement.",
+            optional: true,
+            description:
+              "The company's actual mission statement. If provided, userMission is also required.",
           },
           {
             name: "companyProduct",
             type: "string",
-            optional: false,
-            description: "The company's actual product/service description.",
+            optional: true,
+            description:
+              "The company's actual product/service description. If provided, userProduct is also required.",
           },
         ],
         example_request_url_params:
-          "?userMission=Enable%20artists&userProduct=Audio%20streaming&companyMission=Empower%20creators%20globally&companyProduct=Platform%20for%20digital%20audio",
+          "?userMission=Enable%20artists%20to%20live%20off%20their%20art&companyMission=Empower%20creators%20globally%20through%20innovative%20tools",
         example_response: {
           llmMissionScore: 0.85,
-          llmProductScore: 0.9,
+          llmProductScore: null,
           ceMissionScore: 0.78,
-          ceProductScore: 0.82,
+          ceProductScore: null,
         },
       },
       "GET /api/companies/health": {
