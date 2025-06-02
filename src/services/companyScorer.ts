@@ -1,4 +1,3 @@
-import { pipeline, Pipeline } from "@xenova/transformers";
 import type {
   CompanyScoreRequestQuery,
   CompanyScoreResponse,
@@ -6,39 +5,18 @@ import type {
 import { generateObject } from "ai";
 import { z } from "zod";
 import { defaultModel } from "@lib/llmModels";
-
-// Define a more specific type for the cross-encoder pipeline
-interface CrossEncoderPipeline extends Pipeline {
-  (text: string, options: { text_pair: string }): Promise<
-    Array<{ score: number }> | { score: number } | number
-  >;
-}
-
-// Initialize the cross-encoder pipeline
-// We use a static variable to ensure the model is loaded only once.
-let crossEncoderPipeline: CrossEncoderPipeline | null = null;
-async function getCrossEncoder(): Promise<CrossEncoderPipeline> {
-  if (!crossEncoderPipeline) {
-    try {
-      // Using a model known for semantic similarity and compatible with transformers.js
-      // The 'text-classification' pipeline with a cross-encoder model can give similarity scores.
-      // The model will output a score, often for a "positive" or "related" class if not directly similarity.
-      // We might need to adjust based on the specific model's output structure.
-      // Xenova/ms-marco-MiniLM-L-6-v2-fused is a good candidate.
-      crossEncoderPipeline = (await pipeline(
-        "text-classification",
-        "Xenova/ms-marco-MiniLM-L-6-v2-fused",
-        { quantized: true }
-      )) as CrossEncoderPipeline;
-    } catch (error) {
-      console.error("Failed to load cross-encoder model:", error);
-      throw new Error("Failed to load cross-encoder model");
-    }
-  }
-  return crossEncoderPipeline;
-}
+import {
+  TextSimilarityService,
+  TextSimilarityModel,
+} from "./textSimilarityService";
 
 export class CompanyScorerService {
+  private textSimilarityService: TextSimilarityService;
+
+  constructor() {
+    this.textSimilarityService = new TextSimilarityService();
+  }
+
   public async scoreCompany(
     queryParams: CompanyScoreRequestQuery
   ): Promise<CompanyScoreResponse> {
@@ -115,68 +93,58 @@ export class CompanyScorerService {
       }
     }
 
-    // Define a helper function to extract scores from CE results
-    const extractCeScore = (result: any): number | null => {
-      if (
-        Array.isArray(result) &&
-        result.length > 0 &&
-        typeof result[0].score === "number"
-      ) {
-        return result[0].score;
-      } else if (typeof result === "number") {
-        return result;
-      } else if (result && typeof result.score === "number") {
-        return result.score;
-      }
-      console.warn("Unexpected CE result format:", result);
-      return null;
-    };
-
-    // --- Cross-Encoder Scoring ---
+    // --- Embedding Model Scoring using TextSimilarityService ---
     if (userMission && companyMission) {
       try {
-        const ce = await getCrossEncoder();
-        const ceMissionResult = await ce(userMission, {
-          text_pair: companyMission,
-        });
+        // Try with the default MINILM model first
+        ceMissionScore = await this.textSimilarityService.getSimilarityScore(
+          userMission,
+          companyMission,
+          TextSimilarityModel.MINILM
+        );
 
-        ceMissionScore = extractCeScore(ceMissionResult);
-        if (
-          ceMissionScore !== null &&
-          (ceMissionScore < 0 || ceMissionScore > 1)
-        ) {
-          console.error("Invalid CE mission score or format:", ceMissionResult);
-          ceMissionScore = null;
+        if (ceMissionScore === null) {
           console.warn(
-            "CE mission scoring returned an out-of-range score, resulting in null score."
+            "Text similarity mission scoring returned null, trying alternative model."
+          );
+
+          // Try the paraphrase model as fallback
+          ceMissionScore = await this.textSimilarityService.getSimilarityScore(
+            userMission,
+            companyMission,
+            TextSimilarityModel.PARAPHRASE
           );
         }
       } catch (error) {
-        console.error("Error during Cross-Encoder mission scoring:", error);
+        console.error("Error during text similarity mission scoring:", error);
         // ceMissionScore remains null
       }
     }
 
     if (userProduct && companyProduct) {
       try {
-        const ce = await getCrossEncoder();
-        const ceProductResult = await ce(userProduct, {
-          text_pair: companyProduct,
-        });
+        // Try with the default MINILM model first
+        ceProductScore = await this.textSimilarityService.getSimilarityScore(
+          userProduct,
+          companyProduct,
+          TextSimilarityModel.MINILM
+        );
 
-        ceProductScore = extractCeScore(ceProductResult);
-        if (
-          ceProductScore !== null &&
-          (ceProductScore < 0 || ceProductScore > 1)
-        ) {
-          console.error("Invalid CE product score or format:", ceProductResult);
-          ceProductScore = null;
+        if (ceProductScore === null) {
           console.warn(
-            "CE product scoring returned an out-of-range score, resulting in null score."
+            "Text similarity product scoring returned null, trying alternative model."
+          );
+
+          // Try the paraphrase model as fallback
+          ceProductScore = await this.textSimilarityService.getSimilarityScore(
+            userProduct,
+            companyProduct,
+            TextSimilarityModel.PARAPHRASE
           );
         }
       } catch (error) {
-        console.error("Error during Cross-Encoder product scoring:", error);
+        console.error("Error during text similarity product scoring:", error);
+        // ceProductScore remains null
       }
     }
 
